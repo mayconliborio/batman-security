@@ -8,7 +8,7 @@
 import TextField from "../components/fields/TextField.vue";
 
 export default {
-  name: "ListVulnerabilities",
+  name: "HomePage",
   components: { TextField },
 };
 </script>

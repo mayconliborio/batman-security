@@ -23,7 +23,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 * {
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   font-weight: normal;
 }
 
@@ -90,5 +90,19 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
+}
+
+.flex-column-end {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.flex-column-between {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }

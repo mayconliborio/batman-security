@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Template from "../views/Template";
-import ListVulnerabilities from "../views/ListVulnerabilities";
+import HomePage from "../views/HomePage";
 import RegisterVulnerability from "../views/RegisterVulnerability";
 import UpdateVulnerability from "../views/UpdateVulnerability";
 import DeleteVulnerability from "../views/DeleteVulnerability";
@@ -12,13 +12,13 @@ const routes = [
   {
     name: "Template",
     path: "/",
-    redirect: { name: "ListVulnerabilities" },
+    redirect: { name: "HomePage" },
     component: Template,
     children: [
       {
-        name: "ListVulnerabilities",
-        path: "/listar-vulnerabilidades",
-        component: ListVulnerabilities,
+        name: "HomePage",
+        path: "/pagina-principal",
+        component: HomePage,
       },
       {
         name: "RegisterVulnerability",
@@ -27,12 +27,12 @@ const routes = [
       },
       {
         name: "UpdateVulnerability",
-        path: "/editar-vulnerabilidade",
+        path: "/editar-vulnerabilidade/:id",
         component: UpdateVulnerability,
       },
       {
         name: "DeleteVulnerability",
-        path: "/excluir-vulnerabilidade",
+        path: "/excluir-vulnerabilidade/:id",
         component: DeleteVulnerability,
       },
     ],

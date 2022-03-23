@@ -3,7 +3,7 @@
     :key="name"
     tag="li"
     :to="route_name ? { name: route_name } : ''"
-    class="flex-justify-start is-clickable menu-item"
+    class="flex-justify-start is-clickable radius-12"
   >
     <div class="flex-justify-around">
       <i :class="icon + ' flex-justify-center'"></i>{{ name }}
@@ -23,21 +23,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-li {
-  width: 90%;
-  height: 60px;
-  margin-left: 5%;
-  padding: 0 0 0 20px;
-  border-radius: 30px;
-  font-size: 20px;
-  transition: 200ms;
-}
-
-li:hover {
-  color: $primaryColor;
-  transition: 200ms;
-}
-
 li div {
   font-family: "Roboto Light", sans-serif;
   line-height: 30px;
@@ -50,13 +35,20 @@ li div i {
   height: 30px;
 }
 
-li.router-link-active {
-  background-color: $primaryColor;
-  color: #fff;
-  transition: 700ms;
+li {
+  width: 90%;
+  height: 60px;
+  margin-left: 5%;
+  margin-bottom: 10px;
+  padding: 0 0 0 20px;
+  transition: 200ms;
+  user-select: none;
+  color: $textColor;
 }
 
-.menu-item {
-  flex-direction: row;
+li:hover,
+li.router-link-active {
+  background-color: $secondaryColor;
+  transition: 700ms;
 }
 </style>

@@ -1,31 +1,21 @@
 <template>
-  <menu class="flex-column-start">
-    <div class="logo-box flex-column-center">
-      <img width="150" alt="logo" src="../assets/images/logo.png" />
-      <!--<span class="sub-title">Batman Security</span>-->
+  <menu class="flex-column-between">
+    <div class="w-100 flex-column-center">
+      <div class="logo-box flex-justify-center">
+        <img alt="logo" src="../assets/images/logo.png" />
+        <!--<span class="sub-title">Batman Security</span>-->
+      </div>
+      <ul class="w-100">
+        <MenuItem
+          :name="'Página Principal'"
+          route_name="HomePage"
+          :icon="'fas fa-home'"
+        />
+      </ul>
     </div>
-    <ul class="w-100">
-      <MenuItem
-        :name="'Listar Vulnerabilidades'"
-        route_name="ListVulnerabilities"
-        :icon="'fas fa-list'"
-      />
-      <MenuItem
-        :name="'Cadastrar Vulnerabilidade'"
-        route_name="RegisterVulnerability"
-        :icon="'fas fa-plus'"
-      />
-      <MenuItem
-        :name="'Alterar Vulnerabilidade'"
-        route_name="UpdateVulnerability"
-        :icon="'fas fa-pencil-alt'"
-      />
-      <MenuItem
-        :name="'Excluir Vulnerabilidade'"
-        route_name="DeleteVulnerability"
-        :icon="'fas fa-trash'"
-      />
-    </ul>
+    <div class="flex-justify-start w-100">
+      <img width="" alt="logo" src="../assets/images/batman.png" />
+    </div>
   </menu>
 </template>
 
@@ -40,18 +30,21 @@ export default {
 
 <style scoped lang="scss">
 menu {
-  background-color: $backgroundColor;
+  background-color: $blackColor;
   color: black;
   height: 100%;
-  border-radius: 0 15px 15px;
-  font-size: 23px;
+  border-radius: 0 35px 35px 0;
+  font-size: 18px;
   width: 350px;
   z-index: 10;
 }
 
 .logo-box {
   margin: 20px 0 40px;
-  color: orange;
+  height: 125px;
+  padding: 5px 10px;
+  border-radius: 25px;
+  background-color: $primaryColor;
 }
 
 ul {

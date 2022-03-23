@@ -26,7 +26,6 @@ export default {
 <style scoped>
 .template {
   min-height: 100vh;
-  background: #fff !important;
 }
 
 .container-page {
