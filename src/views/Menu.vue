@@ -3,7 +3,6 @@
     <div class="w-100 flex-column-center">
       <div class="logo-box flex-justify-center">
         <img alt="logo" src="../assets/images/logo.png" />
-        <!--<span class="sub-title">Batman Security</span>-->
       </div>
       <ul class="w-100">
         <MenuItem
