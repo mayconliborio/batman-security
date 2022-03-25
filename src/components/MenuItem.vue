@@ -42,7 +42,6 @@ li {
   margin-bottom: 10px;
   padding: 0 0 0 20px;
   transition: 200ms;
-  user-select: none;
   color: $textColor;
 }
 
