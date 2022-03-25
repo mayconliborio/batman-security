@@ -140,7 +140,7 @@ label {
   display: block;
 }
 
-.v-input.hint >>> .v-messages__message {
+.v-input.hint > .v-messages__message {
   color: var(--blackColor);
   font-family: "Roboto", sans-serif;
   font-size: 14px;
