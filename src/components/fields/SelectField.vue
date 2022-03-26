@@ -20,7 +20,7 @@
         :hint="hint ? hintLenged : ''"
         :persistent-hint="!!hint"
         item-color="32383D"
-        @input="$emit('update:value', select)"
+        @input="$emit('update', select)"
         @keyup.enter="$emit('onEnter', select)"
         @change="$emit('updateEvent', select)"
         return-object
@@ -66,14 +66,14 @@ export default {
       this.select = this.valueField;
     }
     if (!this.rules) {
-      this.$emit("update:value", this.select);
+      this.$emit("update", this.select);
     }
     this.keyField++;
   },
   watch: {
     valueField() {
       this.select = this.valueField;
-      this.$emit("update:value", this.select);
+      this.$emit("update", this.select);
     },
   },
   computed: {

@@ -3,6 +3,7 @@
     :style="'width: ' + (width ? width + 'px;' : 'auto;')"
     class="radius-12 is-clickable flex-justify-center default-button"
     :class="isForm ? 'formButton' : ''"
+    @click="$emit('click')"
   >
     <i :class="icon + ' flex-justify-center icon'"></i>
     {{ text }}

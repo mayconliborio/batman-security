@@ -44,6 +44,11 @@ menu {
   padding: 5px 10px;
   border-radius: 25px;
   background-color: $primaryColor;
+  transition: 0.5s;
+}
+
+.logo-box:hover {
+  background-color: $blackColor;
 }
 
 ul {

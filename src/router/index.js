@@ -19,21 +19,23 @@ const routes = [
         name: "HomePage",
         path: "/pagina-principal",
         component: HomePage,
-      },
-      {
-        name: "RegisterVulnerability",
-        path: "/cadastrar-vulnerabilidade",
-        component: RegisterVulnerability,
-      },
-      {
-        name: "UpdateVulnerability",
-        path: "/editar-vulnerabilidade/:id",
-        component: UpdateVulnerability,
-      },
-      {
-        name: "DeleteVulnerability",
-        path: "/excluir-vulnerabilidade/:id",
-        component: DeleteVulnerability,
+        children: [
+          {
+            name: "RegisterVulnerability",
+            path: "/cadastrar-vulnerabilidade",
+            component: RegisterVulnerability,
+          },
+          {
+            name: "UpdateVulnerability",
+            path: "/editar-vulnerabilidade/:id",
+            component: UpdateVulnerability,
+          },
+          {
+            name: "DeleteVulnerability",
+            path: "/excluir-vulnerabilidade/:id",
+            component: DeleteVulnerability,
+          },
+        ],
       },
     ],
   },
