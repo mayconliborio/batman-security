@@ -8,7 +8,7 @@
         <DefaultButton
           @click="
             $router.push({
-              name: 'RegisterVulnerability',
+              name: 'VulnerabilityRegistration',
             })
           "
           icon="fas fa-plus"
