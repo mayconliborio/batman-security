@@ -33,10 +33,12 @@ export default {
 .default-button {
   height: 50px;
   padding: 0 20px;
+  line-height: 16px;
   background-color: $primaryColor;
   color: $blackColor;
   font-size: 16px;
-  font-family: "Roboto-Bold", sans-serif;
+  font-family: "Roboto Black", sans-serif;
+  font-weight: bold;
 }
 
 .default-button:hover {

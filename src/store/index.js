@@ -4,9 +4,23 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    screenSize: {
+      width: {},
+      heigth: {},
+    },
+  },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    screenResize(state) {
+      state.screenSize.width = document.documentElement.clientWidth;
+      state.screenSize.heigth = document.documentElement.clientHeight;
+    },
+  },
+  actions: {
+    action_screenResize({ commit }) {
+      commit("screenResize");
+    },
+  },
   modules: {},
 });

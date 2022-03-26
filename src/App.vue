@@ -7,3 +7,17 @@
     </v-app>
   </div>
 </template>
+
+<script>
+import { mapActions } from "vuex";
+
+export default {
+  mounted() {
+    this.action_screenResize();
+    window.addEventListener("resize", this.action_screenResize);
+  },
+  methods: {
+    ...mapActions(["action_screenResize"]),
+  },
+};
+</script>

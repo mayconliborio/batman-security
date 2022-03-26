@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import MenuItem from "../components/MenuItem";
+import MenuItem from "../components/others/MenuItem";
 
 export default {
   name: "Menu",

@@ -35,12 +35,10 @@
 export default {
   name: "SelectField",
   props: [
-    "dataCy",
     "label",
     "placeholder",
     "type",
     "cols",
-    "prependInnerIcon",
     "rules",
     "items",
     "keyName",
@@ -48,10 +46,6 @@ export default {
     "disabled",
     "valueField",
     "hint",
-    "helpText",
-    "secondaryKeyName",
-    "secondaryKeyValue",
-    "secondaryLabel",
   ],
   data() {
     return {

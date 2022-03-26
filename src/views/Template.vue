@@ -29,20 +29,20 @@ export default {
 }
 
 .container-page {
-  z-index: 7;
   position: absolute;
-  height: 100vh;
+  height: 100%;
   top: 0;
   width: 100%;
 }
 
 .container-menu {
-  height: 100vh;
+  height: 100%;
 }
 
 .content {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   flex: 1;
+  overflow: auto;
 }
 </style>

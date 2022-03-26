@@ -126,3 +126,16 @@ ul {
   justify-content: space-between !important;
   align-items: center !important;
 }
+
+::-webkit-scrollbar-track {
+  background-color: $blackColor;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  background: $primaryColor;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: $primaryColor;
+}

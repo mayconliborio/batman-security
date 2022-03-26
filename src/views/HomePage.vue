@@ -12,39 +12,10 @@
             })
           "
           icon="fas fa-plus"
-          text="Adicionar Vulnerabilidade"
+          text="Cadastrar Vulnerabilidade"
         />
       </div>
-      <v-form class="w-100 flex-justify-start search-box">
-        <v-container>
-          <v-row>
-            <TextField
-              :col="4"
-              placeholder="Vulnerabilidade 1..."
-              @update="vulnerabilityTitle = $event"
-              label="Título"
-            />
-            <SelectField
-              :col="3"
-              :items="criticalityLevelList"
-              @update="criticalityLevel = $event"
-              label="Grau de Criticidade"
-            />
-            <SelectField
-              :col="3"
-              @update="vulnerabilityType = $event"
-              :items="vulnerabilityTypeList"
-              label="Tipo de Vulnerabilidade"
-            />
-            <DefaultButton
-              icon="fas fa-search"
-              text="Buscar"
-              isForm
-              @click="searchVulnerabilities"
-            />
-          </v-row>
-        </v-container>
-      </v-form>
+      <SearchForm @searchVulnerabilities="searchVulnerabilities($event)" />
     </div>
     <div id="tabela">
       <BatTable :header="tableHeader" :items="vulnerabilities" />
@@ -53,59 +24,19 @@
 </template>
 
 <script>
-import TextField from "../components/fields/TextField.vue";
-import DefaultButton from "../components/DefaultButton.vue";
-import SelectField from "../components/fields/SelectField";
+import DefaultButton from "../components/buttons/DefaultButton.vue";
 import BatTable from "../components/tables/BatTable";
+import SearchForm from "../components/forms/SearchForm";
 
 export default {
   name: "HomePage",
-  components: { SelectField, TextField, DefaultButton, BatTable },
+  components: { SearchForm, DefaultButton, BatTable },
   data() {
     return {
       screenSize: {
         width: document.documentElement.clientWidth,
         heigth: document.documentElement.clientHeight,
       },
-      vulnerabilityTitle: String,
-      vulnerabilityType: {},
-      vulnerabilityTypeList: [
-        {
-          name: "Selecione",
-          value: 0,
-        },
-        {
-          name: "DAST",
-          value: 1,
-        },
-        {
-          name: "SAST",
-          value: 2,
-        },
-        {
-          name: "NETWORK",
-          value: 3,
-        },
-      ],
-      criticalityLevel: {},
-      criticalityLevelList: [
-        {
-          name: "Selecione",
-          value: 0,
-        },
-        {
-          name: "Low",
-          value: 1,
-        },
-        {
-          name: "Mid",
-          value: 2,
-        },
-        {
-          name: "High",
-          value: 3,
-        },
-      ],
       vulnerabilities: [
         {
           title: "Vulnerabilidade 1",
@@ -126,15 +57,15 @@ export default {
           evidences: ["base64", "base64"],
         },
         {
-          title: "Vulnerabilidade 3",
-          criticalityLevel: 1,
-          vulnerabilityType: 1,
+          title: "Vulnerabilidade 4",
+          criticalityLevel: 2,
+          vulnerabilityType: 2,
           evidences: ["base64", "base64"],
         },
         {
-          title: "Vulnerabilidade 3",
-          criticalityLevel: 1,
-          vulnerabilityType: 1,
+          title: "Vulnerabilidade 5",
+          criticalityLevel: 3,
+          vulnerabilityType: 3,
           evidences: ["base64", "base64"],
         },
       ],
@@ -146,20 +77,13 @@ export default {
       ],
     };
   },
-  mounted() {
-    window.addEventListener("resize", this.getDimensions);
-  },
   methods: {
-    getDimensions() {
-      this.width = document.documentElement.clientWidth;
-      this.heigth = document.documentElement.clientHeight;
-    },
-    searchVulnerabilities() {
+    searchVulnerabilities(searchData) {
       console.log(
         "Buscando vulnerabilidades: ",
-        this.vulnerabilityTitle,
-        this.criticalityLevel.value,
-        this.vulnerabilityType.value
+        searchData.vulnerabilityTitle,
+        searchData.criticalityLevel.value,
+        searchData.vulnerabilityType.value
       );
     },
   },
@@ -167,17 +91,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-form {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-}
-
-.search-box {
-  align-items: flex-start !important;
-}
-
 .header {
   color: $primaryColor;
 }
