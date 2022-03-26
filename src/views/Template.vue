@@ -43,7 +43,6 @@ export default {
 .content {
   width: 100%;
   height: 100vh;
-  padding: 20px 0;
   flex: 1;
 }
 </style>

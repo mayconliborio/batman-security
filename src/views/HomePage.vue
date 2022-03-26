@@ -32,6 +32,9 @@
         </v-container>
       </v-form>
     </div>
+    <div id="tabela">
+      <BatTable :header="tableHeader" :items="vulnerabilities" />
+    </div>
   </div>
 </template>
 
@@ -39,10 +42,11 @@
 import TextField from "../components/fields/TextField.vue";
 import DefaultButton from "../components/DefaultButton.vue";
 import SelectField from "../components/fields/SelectField";
+import BatTable from "../components/tables/BatTable";
 
 export default {
   name: "HomePage",
-  components: { SelectField, TextField, DefaultButton },
+  components: { SelectField, TextField, DefaultButton, BatTable },
   data() {
     return {
       screenSize: {
@@ -80,6 +84,32 @@ export default {
           value: 3,
         },
       ],
+      vulnerabilities: [
+        {
+          title: "Vulnerabilidade 1",
+          criticalityLevel: 3,
+          vulnerabilityType: 3,
+          evidences: ["base64", "base64"],
+        },
+        {
+          title: "Vulnerabilidade 2",
+          criticalityLevel: 2,
+          vulnerabilityType: 2,
+          evidences: ["base64", "base64"],
+        },
+        {
+          title: "Vulnerabilidade 3",
+          criticalityLevel: 1,
+          vulnerabilityType: 1,
+          evidences: ["base64", "base64"],
+        },
+      ],
+      tableHeader: [
+        { title: "GRAU", width: 10 },
+        { title: "TÍTULO", width: 25 },
+        { title: "TIPO", width: 20 },
+        { title: "EVIDÊNCIA", width: 25 },
+      ],
     };
   },
   mounted() {
@@ -106,12 +136,12 @@ form {
   align-items: flex-start !important;
 }
 
-#home-page {
-  padding: 0 30px;
-}
-
 .header {
   color: $primaryColor;
+}
+
+#home-page {
+  padding: 0 30px;
 }
 
 .title-line {
