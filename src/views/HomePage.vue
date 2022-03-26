@@ -125,6 +125,18 @@ export default {
           vulnerabilityType: 1,
           evidences: ["base64", "base64"],
         },
+        {
+          title: "Vulnerabilidade 3",
+          criticalityLevel: 1,
+          vulnerabilityType: 1,
+          evidences: ["base64", "base64"],
+        },
+        {
+          title: "Vulnerabilidade 3",
+          criticalityLevel: 1,
+          vulnerabilityType: 1,
+          evidences: ["base64", "base64"],
+        },
       ],
       tableHeader: [
         { title: "GRAU", width: 10 },
