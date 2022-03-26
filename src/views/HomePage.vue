@@ -5,13 +5,22 @@
         <v-col cols="">
           <h1>Lista de Vulnerabilidade</h1>
         </v-col>
-        <DefaultButton icon="fas fa-plus" text="Adicionar Vulnerabilidade" />
+        <DefaultButton
+          @click="
+            $router.push({
+              name: 'RegisterVulnerability',
+            })
+          "
+          icon="fas fa-plus"
+          text="Adicionar Vulnerabilidade"
+        />
       </div>
       <v-form class="w-100 flex-justify-start search-box">
         <v-container>
           <v-row>
             <TextField
               :col="4"
+              placeholder="Vulnerabilidade 1..."
               @update="vulnerabilityTitle = $event"
               label="Título"
             />
@@ -27,7 +36,12 @@
               :items="vulnerabilityTypeList"
               label="Tipo de Vulnerabilidade"
             />
-            <DefaultButton icon="fas fa-search" text="Buscar" isForm />
+            <DefaultButton
+              icon="fas fa-search"
+              text="Buscar"
+              isForm
+              @click="searchVulnerabilities"
+            />
           </v-row>
         </v-container>
       </v-form>
@@ -57,6 +71,10 @@ export default {
       vulnerabilityType: {},
       vulnerabilityTypeList: [
         {
+          name: "Selecione",
+          value: 0,
+        },
+        {
           name: "DAST",
           value: 1,
         },
@@ -71,6 +89,10 @@ export default {
       ],
       criticalityLevel: {},
       criticalityLevelList: [
+        {
+          name: "Selecione",
+          value: 0,
+        },
         {
           name: "Low",
           value: 1,
@@ -120,6 +142,14 @@ export default {
       this.width = document.documentElement.clientWidth;
       this.heigth = document.documentElement.clientHeight;
     },
+    searchVulnerabilities() {
+      console.log(
+        "Buscando vulnerabilidades: ",
+        this.vulnerabilityTitle,
+        this.criticalityLevel.value,
+        this.vulnerabilityType.value
+      );
+    },
   },
 };
 </script>
@@ -145,6 +175,7 @@ form {
 }
 
 .title-line {
-  margin-bottom: 100px;
+  margin-top: 20px;
+  margin-bottom: 50px;
 }
 </style>
