@@ -50,13 +50,13 @@ export default {
   watch: {
     valueField() {
       this.text = this.valueField;
-      this.$emit("update:value", this.text);
+      this.$emit("update", this.text);
     },
   },
   mounted() {
     if (this.valueField) {
       this.text = this.valueField;
-      this.$emit("update:value", this.text);
+      this.$emit("update", this.text);
     }
   },
 };

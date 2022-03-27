@@ -19,55 +19,33 @@ export default new Vuex.Store({
       message: "",
       sucess: false,
     },
+    vulnerabilitiesIndex: 0,
     vulnerabilities: [
       {
         id: 1,
-        title: "Teste 1",
-        vulnerabilityComment: "Comentario 1",
+        title: "Title",
         criticalityLevel: 3,
-        vulnerabilityType: 3,
+        type: 3,
         evidences: [],
-        solutionProposal: "Solução 1",
-      },
-      {
-        id: 2,
-        title: "Teste 2",
-        vulnerabilityComment: "Comentario 2",
-        criticalityLevel: 3,
-        vulnerabilityType: 1,
-        evidences: [],
-        solutionProposal: "Solução 2",
-      },
-      {
-        id: 3,
-        title: "Teste 3",
-        vulnerabilityComment: "Comentario 3",
-        criticalityLevel: 1,
-        vulnerabilityType: 1,
-        evidences: [],
-        solutionProposal: "Solução 3",
-      },
-      {
-        id: 4,
-        title: "Teste 4",
-        vulnerabilityComment: "Comentario 4",
-        criticalityLevel: 2,
-        vulnerabilityType: 3,
-        evidences: [],
-        solutionProposal: "Solução 4",
-      },
-      {
-        id: 5,
-        title: "Teste 5",
-        vulnerabilityComment: "Comentario 5",
-        criticalityLevel: 2,
-        vulnerabilityType: 1,
-        evidences: [],
-        solutionProposal: "Solução 5",
+        comment: "Comentario",
+        solutionProposal: "Lorem Ipsum",
       },
     ],
   }),
-  getters: {},
+  getters: {
+    getVulnerabilityById: (state) => (id) => {
+      return state.vulnerabilities.find(
+        (vulnerability) => vulnerability.id === parseInt(id)
+      );
+    },
+    getVulnerabilityIndexById: (state) => (id) => {
+      return state.vulnerabilities
+        .map((vul) => {
+          return vul.id;
+        })
+        .indexOf(id);
+    },
+  },
   mutations: {
     screenResize(state) {
       state.screenSize.width = document.documentElement.clientWidth;
@@ -95,6 +73,12 @@ export default new Vuex.Store({
       state.snackBar.message = "";
       state.snackBar.sucess = "";
     },
+    setVulnerabilities(state, payload) {
+      state.vulnerabilities = payload;
+    },
+    incrementVulnerabilitiesIndex(state) {
+      state.vulnerabilitiesIndex++;
+    },
   },
   actions: {
     action_screenResize(context) {
@@ -109,6 +93,32 @@ export default new Vuex.Store({
     action_changeMessageSnackBar(context, payload) {
       context.commit("setMessageSnackBar", payload);
       setTimeout(() => context.commit("resetMessageSnackbar"), 5000);
+    },
+    action_createVulnerability(context, payload) {
+      let vulnerabilities = context.state.vulnerabilities;
+      vulnerabilities.push(payload);
+      context.commit("setVulnerabilities");
+      context.commit("incrementVulnerabilitiesIndex");
+    },
+    action_updateVulnerability(context, payload) {
+      if (context.state.vulnerabilities.length > 0) {
+        let index = context.getters.getVulnerabilityIndexById(payload);
+        let vulnerabilities = context.state.vulnerabilities;
+
+        vulnerabilities.splice(index, 1, payload);
+        context.commit("setVulnerabilities", vulnerabilities);
+      }
+    },
+    action_deleteVulnerability(context, payload) {
+      let vulnerabilities = context.state.vulnerabilities;
+      let index = vulnerabilities
+        .map((vul) => {
+          return vul.id;
+        })
+        .indexOf(payload);
+
+      vulnerabilities.splice(index, 1);
+      context.commit("setVulnerabilities", vulnerabilities);
     },
   },
   modules: {},

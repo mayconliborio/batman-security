@@ -44,19 +44,25 @@
           @update="solutionProposal = $event"
         />
       </v-row>
-      <v-row class="w-100 flex-justify-center">
+      <v-row class="w-100 flex-justify-around">
+        <DefaultButton
+          icon="fas fa-arrow-left"
+          text="Voltar"
+          secondaryButton
+          width="280"
+          isForm
+          @click="
+            $router.push({
+              name: 'HomePage',
+            })
+          "
+        />
         <DefaultButton
           icon="fas fa-plus"
           text="Cadastrar Vulnerabilidade"
           isForm
+          width="280"
           @click="createVulnerability(updatedValues)"
-        />
-        <ConfirmationModal
-          v-if="modalControler.show"
-          :header="modalControler.header"
-          :messages="modalControler.messages"
-          @cancel="action_resetModalControler()"
-          @confirm="deleteVulnerability(activeVulnerability.id)"
         />
       </v-row>
     </v-container>
@@ -71,12 +77,10 @@ import GlobalData from "../../mixins/GlobalData";
 import TextAreaField from "../fields/TextAreaField";
 import MultiImagesUploadField from "../fields/MultiImagesUploadField";
 import { mapState, mapActions } from "vuex";
-import ConfirmationModal from "../modal/ConfirmationModal";
 
 export default {
   name: "CreationForm",
   components: {
-    ConfirmationModal,
     MultiImagesUploadField,
     TextAreaField,
     DefaultButton,
@@ -94,19 +98,16 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-      "action_setModalControler",
-      "action_resetModalControler",
-      "action_changeMessageSnackBar",
-    ]),
+    ...mapActions(["action_changeMessageSnackBar"]),
     createVulnerability() {
+      //validar campos obrigatórios
       console.log("Cadastrando vulnerabilidade...");
     },
   },
   computed: {
     ...mapState({
       screenSize: (state) => state.screenSize,
-      modalControler: (state) => state.modalControler,
+      id: (state) => state.vulnerabilitiesIndex,
     }),
     updatedValues() {
       return {

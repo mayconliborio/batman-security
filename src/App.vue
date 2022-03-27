@@ -17,7 +17,7 @@ export default {
     window.addEventListener("resize", this.action_screenResize);
   },
   methods: {
-    ...mapActions(["action_screenResize"]),
+    ...mapActions(["action_screenResize", "action_updateVulnerability"]),
   },
 };
 </script>

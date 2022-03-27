@@ -23,7 +23,7 @@ export default {
       vulnerabilityTypeList: [
         {
           name: "Selecione",
-          value: undefined,
+          value: 0,
         },
         {
           name: "DAST",

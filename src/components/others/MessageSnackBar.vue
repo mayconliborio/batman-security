@@ -45,7 +45,7 @@ export default {
   color: $blackColor;
   border: 1px solid $blackColor;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
   z-index: 999;
   border-radius: 10px;
   animation-name: upToDown;
@@ -90,6 +90,6 @@ export default {
 
 .snackbar i {
   margin-right: 10px;
-  font-size: 20px;
+  font-size: 18px;
 }
 </style>

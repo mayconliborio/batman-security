@@ -19,13 +19,25 @@
       @cancel="action_resetModalControler()"
       @confirm="deleteVulnerability(activeVulnerability.id)"
     />
-    <div v-for="item in items" :key="item.id" class="table-rows">
-      <VulnerabilityRow
-        :item="modifiedItem(item)"
-        @showClick="showVulnerability($event)"
-        @editClick="editVulnerability($event)"
-        @deleteClick="deleteVulnerabilityModalControler($event)"
-      />
+    <div class="table-rows w-100 flex-column-center">
+      <div
+        v-for="vulnerability in vulnerabilities"
+        class="w-100"
+        :key="vulnerability.id"
+      >
+        <VulnerabilityRow
+          :vulnerability="modifiedItem(vulnerability)"
+          @showClick="showVulnerability($event)"
+          @editClick="editVulnerability($event)"
+          @deleteClick="deleteVulnerabilityModalControler($event)"
+        />
+      </div>
+      <span
+        class="text-primary table-content"
+        v-if="vulnerabilities.length === 0"
+      >
+        Nenhuma vulnerabilidade encontrada!
+      </span>
     </div>
   </div>
 </template>
@@ -55,17 +67,18 @@ export default {
       "action_setModalControler",
       "action_resetModalControler",
       "action_changeMessageSnackBar",
+      "action_deleteVulnerability",
     ]),
-    modifiedItem(item) {
-      let modifiedItem = { ...item };
+    modifiedItem(vulnerability) {
+      let modifiedItem = { ...vulnerability };
 
       modifiedItem.criticalityLevel = {
-        value: item.criticalityLevel,
-        name: this.getCriticalityLevelName(item.criticalityLevel),
+        value: vulnerability.criticalityLevel,
+        name: this.getCriticalityLevelName(vulnerability.criticalityLevel),
       };
-      modifiedItem.vulnerabilityType = {
-        value: item.vulnerabilityType,
-        name: this.getVulnerabilityTypeName(item.vulnerabilityType),
+      modifiedItem.type = {
+        value: vulnerability.type,
+        name: this.getVulnerabilityTypeName(vulnerability.type),
       };
       return { ...modifiedItem, edit: "fas fa-pen", delete: "fas fa-trash" };
     },
@@ -85,12 +98,12 @@ export default {
     },
     deleteVulnerability(item) {
       this.otherButton = true;
+      this.action_deleteVulnerability(item);
       this.action_changeMessageSnackBar({
         message: "Vulnerabilidade excluida com sucesso!",
         sucess: true,
       });
       this.action_resetModalControler();
-      console.log(item);
     },
     deleteVulnerabilityModalControler(item) {
       this.otherButton = true;
@@ -109,6 +122,7 @@ export default {
   computed: {
     ...mapState({
       modalControler: (state) => state.modalControler,
+      vulnerabilities: (state) => state.vulnerabilities,
     }),
   },
 };
@@ -128,8 +142,17 @@ h2 {
   padding: 0 40px 10px;
 }
 
+.table-content {
+  font-size: 20px;
+  margin-top: 50px;
+}
+
 .table-rows,
 .table-header {
   padding-left: 6px;
+}
+
+.text-primary {
+  color: $primaryColor;
 }
 </style>

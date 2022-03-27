@@ -25,6 +25,11 @@ export default {
           return "";
       }
     },
+    goToHomePage() {
+      this.$router.push({
+        name: "HomePage",
+      });
+    },
   },
 };
 </script>

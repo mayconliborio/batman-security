@@ -19,13 +19,19 @@
       />
       <p v-if="true">
         <i class="fas fa-paperclip text-primary"></i><br />
-        Arraste e solte aqui arquivos <span class="text-primary">.png</span> ou
-        <span class="text-primary">.jpg</span> <br />
-        ou clique aqui para selecionar os arquivos do seu computador
-        <br />
-        <span class="selected-images" v-if="fileCount"
-          >{{ fileCount }} Arquivos selecionados...</span
-        >
+        <span v-if="!fileCount">
+          Arraste e solte aqui arquivos
+          <span class="text-primary">.png</span> ou
+          <span class="text-primary">.jpg</span><br />ou clique aqui para
+          selecionar os arquivos do seu computador
+          <br />
+        </span>
+        <span v-else>
+          <span class="selected-images"
+            >{{ fileCount }} Arquivos selecionados... <br
+          /></span>
+          <span> Clique aqui para alterar os arquivos selecionados! </span>
+        </span>
       </p>
     </div>
   </v-col>
@@ -76,7 +82,7 @@ label {
 }
 
 .label-box {
-  margin-bottom: 4px;
+  margin-bottom: 5px;
   margin-top: 4px;
 }
 

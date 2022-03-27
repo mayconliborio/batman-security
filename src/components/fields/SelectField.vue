@@ -20,9 +20,7 @@
         :hint="hint ? hintLenged : ''"
         :persistent-hint="!!hint"
         item-color="32383D"
-        @input="$emit('update', select)"
         @keyup.enter="$emit('onEnter', select)"
-        @change="$emit('updateEvent', select)"
         return-object
         outlined
       >
@@ -60,14 +58,30 @@ export default {
       this.select = this.valueField;
     }
     if (!this.rules) {
+      console.log("visao");
       this.$emit("update", this.select);
     }
     this.keyField++;
   },
   watch: {
-    valueField() {
-      this.select = this.valueField;
-      this.$emit("update", this.select);
+    valueField: {
+      immediate: true,
+      handler(newText, oldText) {
+        if (
+          newText &&
+          (newText[this.keyValue] || newText[this.keyValue] === "") &&
+          newText[this.keyValue] !==
+            (oldText ? oldText[this.keyValue] : oldText)
+        ) {
+          this.select = newText;
+        }
+      },
+    },
+    select: {
+      immediate: true,
+      handler() {
+        this.$emit("update", this.select);
+      },
     },
   },
   computed: {
