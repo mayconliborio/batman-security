@@ -6,12 +6,14 @@
           :cols="6"
           placeholder="Vulnerabilidade 1..."
           @update="vulnerabilityTitle = $event"
+          :valueField="vulnerability.title"
           label="Título"
         />
         <TextField
           :cols="6"
           placeholder="Afeta a segurança..."
-          @update="vulnerabilityTitle = $event"
+          @update="vulnerabilityComment = $event"
+          :valueField="vulnerability.comment"
           label="Comentário"
         />
       </v-row>
@@ -20,12 +22,14 @@
         <SelectField
           :col="6"
           @update="vulnerabilityType = $event"
+          :valueField="{ value: vulnerability.vulnerabilityType }"
           :items="vulnerabilityTypeList"
           label="Tipo de Vulnerabilidade"
         />
         <SelectField
           :col="6"
           :items="criticalityLevelList"
+          :valueField="{ value: vulnerability.criticalityLevel }"
           @update="criticalityLevel = $event"
           label="Grau de Criticidade"
         />
@@ -41,15 +45,16 @@
         <TextAreaField
           label="Solução Proposta"
           :rows="screenSize.heigth > 847 ? 5 : 4"
+          :valueField="vulnerability.solutionProposal"
           @update="solutionProposal = $event"
         />
       </v-row>
       <v-row class="w-100 flex-justify-center">
         <DefaultButton
-          icon="fas fa-plus"
-          text="Cadastrar Vulnerabilidade"
+          icon="fas fa-pen"
+          text="Editar Vulnerabilidade"
           isForm
-          @click="createVulnerability(updatedValues)"
+          @click="saveEditedVulnerability(updatedValues)"
         />
         <ConfirmationModal
           v-if="modalControler.show"
@@ -70,11 +75,11 @@ import DefaultButton from "../buttons/DefaultButton";
 import GlobalData from "../../mixins/GlobalData";
 import TextAreaField from "../fields/TextAreaField";
 import MultiImagesUploadField from "../fields/MultiImagesUploadField";
-import { mapState, mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import ConfirmationModal from "../modal/ConfirmationModal";
 
 export default {
-  name: "CreationForm",
+  name: "EditForm",
   components: {
     ConfirmationModal,
     MultiImagesUploadField,
@@ -86,7 +91,9 @@ export default {
   mixins: [GlobalData],
   data() {
     return {
+      vulnerability: {},
       vulnerabilityTitle: String,
+      vulnerabilityComment: String,
       vulnerabilityType: {},
       criticalityLevel: {},
       evidences: {},
@@ -99,9 +106,24 @@ export default {
       "action_resetModalControler",
       "action_changeMessageSnackBar",
     ]),
-    createVulnerability() {
+    saveEditedVulnerability() {
       console.log("Cadastrando vulnerabilidade...");
     },
+    searchVulnerability(id) {
+      console.log("Buscando Vulnerabilidade com id ", id);
+    },
+  },
+  mounted() {
+    this.vulnerability = {
+      id: 1,
+      title: "Vulnerabilidade 1",
+      criticalityLevel: 3,
+      vulnerabilityType: 3,
+      evidences: ["base64", "base64"],
+      comment: "Isso e aquilo",
+      solutionProposal: "Lorem Ipsum",
+    };
+    this.searchVulnerability(this.$route.params.id);
   },
   computed: {
     ...mapState({

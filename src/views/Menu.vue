@@ -10,6 +10,17 @@
           route_name="HomePage"
           :icon="'fas fa-home'"
         />
+        <MenuItem
+          :name="'Cadastro de Vulnerabilidade'"
+          route_name="VulnerabilityRegistration"
+          :icon="'fas fa-plus'"
+        />
+        <MenuItem
+          notClickable
+          :name="'Ediçao de Vulnerabilidade'"
+          route_name="UpdateVulnerability"
+          :icon="'fas fa-pen'"
+        />
       </ul>
     </div>
     <div class="flex-justify-start w-100">
@@ -32,7 +43,7 @@ menu {
   background-color: $blackColor;
   color: black;
   height: 100%;
-  border-radius: 0 35px 35px 0;
+  border-radius: 0 30px 30px 0;
   font-size: 18px;
   width: 350px;
   z-index: 10;

@@ -106,6 +106,13 @@ ul {
   align-items: center !important;
 }
 
+.flex-column-around {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+}
+
 .flex-column-start {
   display: flex !important;
   flex-direction: column !important;

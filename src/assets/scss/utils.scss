@@ -20,3 +20,7 @@ $radiusPixels: 4 6 8 10 12 25;
   cursor: pointer;
   user-select: none;
 }
+.is-not-clickable {
+  pointer-events: none;
+  user-select: none;
+}

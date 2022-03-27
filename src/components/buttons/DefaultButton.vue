@@ -2,7 +2,10 @@
   <div
     :style="'width: ' + (width ? width + 'px;' : 'auto;')"
     class="radius-12 is-clickable flex-justify-center default-button"
-    :class="isForm ? 'formButton' : ''"
+    :class="
+      (isForm ? 'formButton' : '') +
+      (secondaryButton ? ' secondary-button' : '')
+    "
     @click="$emit('click')"
   >
     <i :class="icon + ' flex-justify-center icon'"></i>
@@ -17,6 +20,10 @@ export default {
     text: String,
     icon: String,
     width: String,
+    secondaryButton: {
+      type: Boolean,
+      default: false,
+    },
     isForm: {
       type: Boolean,
       default: false,
@@ -38,7 +45,17 @@ export default {
   color: $blackColor;
   font-size: 16px;
   font-family: "Roboto Black", sans-serif;
+  border: 1px solid $primaryColor;
   font-weight: bold;
+}
+
+.secondary-button {
+  background-color: transparent;
+  color: $primaryColor;
+}
+
+.secondary-button:hover {
+  color: $blackColor;
 }
 
 .default-button:hover {
@@ -47,6 +64,5 @@ export default {
 
 .formButton {
   margin: 29px 0 0 6px;
-  border: 1px solid $primaryColor;
 }
 </style>

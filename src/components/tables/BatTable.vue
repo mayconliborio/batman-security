@@ -12,12 +12,19 @@
         </h2>
       </div>
     </div>
+    <ConfirmationModal
+      v-if="modalControler.show"
+      :header="modalControler.header"
+      :messages="modalControler.messages"
+      @cancel="action_resetModalControler()"
+      @confirm="deleteVulnerability(activeVulnerability.id)"
+    />
     <div v-for="item in items" :key="item.id" class="table-rows">
       <VulnerabilityRow
         :item="modifiedItem(item)"
         @showClick="showVulnerability($event)"
         @editClick="editVulnerability($event)"
-        @deleteClick="deleteVulnerability($event)"
+        @deleteClick="deleteVulnerabilityModalControler($event)"
       />
     </div>
   </div>
@@ -25,14 +32,30 @@
 
 <script>
 import VulnerabilityRow from "../rows/VulnerabilityRow";
+import ConfirmationModal from "../modal/ConfirmationModal";
+import GlobalData from "../../mixins/GlobalData";
+import GlobalMethods from "../../mixins/GlobalMethods";
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "BatTable",
-  components: { VulnerabilityRow },
+  mixins: [GlobalData, GlobalMethods],
+  data() {
+    return {
+      activeVulnerability: {},
+    };
+  },
+  components: { ConfirmationModal, VulnerabilityRow },
   props: {
     header: {},
     items: {},
   },
   methods: {
+    ...mapActions([
+      "action_setModalControler",
+      "action_resetModalControler",
+      "action_changeMessageSnackBar",
+    ]),
     modifiedItem(item) {
       let modifiedItem = { ...item };
 
@@ -46,30 +69,6 @@ export default {
       };
       return { ...modifiedItem, edit: "fas fa-pen", delete: "fas fa-trash" };
     },
-    getCriticalityLevelName(criticalityLevel) {
-      switch (criticalityLevel) {
-        case 1:
-          return "Low";
-        case 2:
-          return "Mid";
-        case 3:
-          return "High";
-        default:
-          return "";
-      }
-    },
-    getVulnerabilityTypeName(criticalityLevel) {
-      switch (criticalityLevel) {
-        case 1:
-          return "DAST";
-        case 2:
-          return "SAST";
-        case 3:
-          return "NETWORK";
-        default:
-          return "";
-      }
-    },
     showVulnerability(item) {
       if (this.otherButton) {
         this.otherButton = !this.otherButton;
@@ -79,12 +78,38 @@ export default {
     },
     editVulnerability(item) {
       this.otherButton = true;
-      console.log("Editando item: ", item);
+      this.$router.push({
+        name: "UpdateVulnerability",
+        params: { id: item.id },
+      });
     },
     deleteVulnerability(item) {
       this.otherButton = true;
-      console.log("Deletando item: ", item);
+      this.action_changeMessageSnackBar({
+        message: "Vulnerabilidade excluida com sucesso!",
+        sucess: true,
+      });
+      this.action_resetModalControler();
+      console.log(item);
     },
+    deleteVulnerabilityModalControler(item) {
+      this.otherButton = true;
+      let newModalControler = {
+        header: "Excluir Vulnerabilidade",
+        messages: [
+          `Você está prestes a excluir a vulnerabilidade ${item.title}.`,
+          "Deseja continuar?",
+        ],
+        show: true,
+      };
+      this.action_setModalControler(newModalControler);
+      this.activeVulnerability = item;
+    },
+  },
+  computed: {
+    ...mapState({
+      modalControler: (state) => state.modalControler,
+    }),
   },
 };
 </script>
@@ -93,6 +118,7 @@ export default {
 h2 {
   font-size: 22px;
 }
+
 #bat-table {
   margin-top: 50px;
   color: $textColor;

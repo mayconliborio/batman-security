@@ -1,5 +1,5 @@
 <template>
-  <v-col :cols="cols">
+  <v-col :cols="cols" id="multi-image-upload">
     <div class="label-box">
       <label>{{ label }}</label>
     </div>
@@ -71,8 +71,13 @@ label {
   font-size: 14px !important;
 }
 
+#multi-image-upload {
+  margin-bottom: 8px;
+}
+
 .label-box {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
+  margin-top: 4px;
 }
 
 .drop-box {

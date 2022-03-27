@@ -100,7 +100,8 @@ label {
 }
 
 .label-box {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
+  margin-top: 4px;
 }
 
 .v-input ::v-deep input {
@@ -150,11 +151,11 @@ label {
 }
 
 .v-input.borderSuccess ::v-deep .v-input__slot {
-  border: solid $greenColor 2px !important;
+  border: solid $sucessColor 2px !important;
 }
 
 .v-input.borderDanger ::v-deep .v-input__slot {
-  border: solid $greenColor 2px !important;
+  border: solid $sucessColor 2px !important;
 }
 
 .v-input ::v-deep input::placeholder {
@@ -192,6 +193,9 @@ label {
   color: white !important;
 }
 
+::v-deep .v-select__selection--comma {
+  overflow: visible;
+}
 ::v-deep .v-menu__content {
   width: 100%;
   min-width: 100%;

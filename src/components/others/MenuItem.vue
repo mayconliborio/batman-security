@@ -2,8 +2,9 @@
   <router-link
     :key="name"
     tag="li"
-    :to="route_name ? { name: route_name } : ''"
-    class="flex-justify-start is-clickable radius-12"
+    :to="route_name ? { name: route_name, params: { id: Number } } : ''"
+    class="flex-justify-start radius-12"
+    :class="notClickable ? 'is-not-clickable' : ' is-clickable'"
   >
     <div class="flex-justify-around">
       <i :class="icon + ' flex-justify-center'"></i>{{ name }}
@@ -18,6 +19,7 @@ export default {
     name: String,
     route_name: String,
     icon: String,
+    notClickable: Boolean,
   },
 };
 </script>

@@ -27,6 +27,7 @@
 import DefaultButton from "../components/buttons/DefaultButton.vue";
 import BatTable from "../components/tables/BatTable";
 import SearchForm from "../components/forms/SearchForm";
+import { mapState } from "vuex";
 
 export default {
   name: "HomePage",
@@ -37,38 +38,6 @@ export default {
         width: document.documentElement.clientWidth,
         heigth: document.documentElement.clientHeight,
       },
-      vulnerabilities: [
-        {
-          title: "Vulnerabilidade 1",
-          criticalityLevel: 3,
-          vulnerabilityType: 3,
-          evidences: ["base64", "base64"],
-        },
-        {
-          title: "Vulnerabilidade 2",
-          criticalityLevel: 2,
-          vulnerabilityType: 2,
-          evidences: ["base64", "base64"],
-        },
-        {
-          title: "Vulnerabilidade 3",
-          criticalityLevel: 1,
-          vulnerabilityType: 1,
-          evidences: ["base64", "base64"],
-        },
-        {
-          title: "Vulnerabilidade 4",
-          criticalityLevel: 2,
-          vulnerabilityType: 2,
-          evidences: ["base64", "base64"],
-        },
-        {
-          title: "Vulnerabilidade 5",
-          criticalityLevel: 3,
-          vulnerabilityType: 3,
-          evidences: ["base64", "base64"],
-        },
-      ],
       tableHeader: [
         { title: "GRAU", width: 10 },
         { title: "TÍTULO", width: 25 },
@@ -86,6 +55,11 @@ export default {
         searchData.vulnerabilityType.value
       );
     },
+  },
+  computed: {
+    ...mapState({
+      vulnerabilities: (state) => state.vulnerabilities,
+    }),
   },
 };
 </script>
