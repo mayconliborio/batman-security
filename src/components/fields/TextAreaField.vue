@@ -4,57 +4,60 @@
       <label>{{ label }}</label>
     </div>
     <div class="container-input">
-      <v-text-field
-        :append-icon="appendIcon"
+      <v-textarea
+        :rows="rows || 4"
+        :no-resize="true"
         :disabled="disabled"
+        :class="{
+          'has-rules': rules,
+          borderSuccess: borderSuccess,
+          borderDanger: borderDanger,
+        }"
         :rules="rules ? rules : []"
         v-model="text"
-        :type="type"
         :placeholder="placeholder"
         class="text-field"
+        @input="$emit('update', text)"
         @keyup.enter="$emit('onEnter', text)"
         outlined
+        :height="heigth"
       >
-      </v-text-field>
+      </v-textarea>
     </div>
   </v-col>
 </template>
 
 <script>
 export default {
-  name: "TextField",
+  name: "TextAreaField",
   props: {
-    label: {},
-    placeholder: {},
-    type: {},
-    cols: {},
-    appendIcon: {},
-    rules: {},
-    valueField: {},
-    disabled: {
-      default: false,
-    },
+    label: String,
+    placeholder: String,
+    cols: Number,
+    rules: String,
+    valueField: String,
+    disabled: Boolean,
+    borderSuccess: String,
+    borderDanger: String,
+    heigth: String,
+    rows: Number,
   },
   data() {
     return {
-      text: this.valueField || "",
+      text: "",
     };
   },
   watch: {
-    valueField: {
-      immediate: true,
-      handler(newText, oldText) {
-        if ((newText === "" || newText) && newText !== oldText) {
-          this.text = newText;
-        }
-      },
+    valueField() {
+      this.text = this.valueField;
+      this.$emit("update", this.text);
     },
-    text: {
-      immediate: true,
-      handler() {
-        this.$emit("update", this.text);
-      },
-    },
+  },
+  mounted() {
+    if (this.valueField) {
+      this.text = this.valueField;
+      this.$emit("update", this.text);
+    }
   },
 };
 </script>
@@ -102,9 +105,6 @@ label {
   background: transparent !important;
   border-radius: 10px;
   border: 1px solid $textColor !important;
-  height: 50px !important;
-  min-height: 50px !important;
-  max-height: 50px !important;
 }
 
 .v-input.borderSuccess ::v-deep .v-input__slot {
@@ -146,5 +146,16 @@ label {
 
 .container-input {
   display: flex;
+}
+
+.v-input ::v-deep textarea {
+  color: $primaryColor !important;
+  font-family: "Roboto Black", sans-serif;
+  font-size: 18px;
+}
+.v-input ::v-deep textarea {
+  color: $primaryColor !important;
+  caret-color: $primaryColor !important;
+  font-family: "Roboto Black", sans-serif !important;
 }
 </style>

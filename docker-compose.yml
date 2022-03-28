@@ -3,7 +3,7 @@ version: '3.7'
 services:
   ## Front-end Service##
   front:
-    image: mayconliborio/prime-security-front
+    image: mayconliborio/batman-security-front
     build: .
     volumes:
       - .:/app

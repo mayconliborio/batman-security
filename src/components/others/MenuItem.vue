@@ -2,8 +2,9 @@
   <router-link
     :key="name"
     tag="li"
-    :to="route_name ? { name: route_name } : ''"
-    class="flex-justify-start is-clickable radius-12"
+    :to="route_name"
+    class="flex-justify-start radius-12"
+    :class="notClickable ? 'is-not-clickable' : ' is-clickable'"
   >
     <div class="flex-justify-around">
       <i :class="icon + ' flex-justify-center'"></i>{{ name }}
@@ -16,8 +17,9 @@ export default {
   name: "MenuItem",
   props: {
     name: String,
-    route_name: String,
+    route_name: [Object, String],
     icon: String,
+    notClickable: Boolean,
   },
 };
 </script>
@@ -42,7 +44,6 @@ li {
   margin-bottom: 10px;
   padding: 0 0 0 20px;
   transition: 200ms;
-  user-select: none;
   color: $textColor;
 }
 

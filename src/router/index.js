@@ -2,9 +2,9 @@ import Vue from "vue";
 import Router from "vue-router";
 import Template from "../views/Template";
 import HomePage from "../views/HomePage";
-import RegisterVulnerability from "../views/RegisterVulnerability";
+import VulnerabilityRegistration from "../views/VulnerabilityRegistration";
 import UpdateVulnerability from "../views/UpdateVulnerability";
-import DeleteVulnerability from "../views/DeleteVulnerability";
+import ShowVulnerability from "../views/ShowVulnerability";
 
 Vue.use(Router);
 
@@ -21,9 +21,9 @@ const routes = [
         component: HomePage,
       },
       {
-        name: "RegisterVulnerability",
+        name: "VulnerabilityRegistration",
         path: "/cadastrar-vulnerabilidade",
-        component: RegisterVulnerability,
+        component: VulnerabilityRegistration,
       },
       {
         name: "UpdateVulnerability",
@@ -31,9 +31,9 @@ const routes = [
         component: UpdateVulnerability,
       },
       {
-        name: "DeleteVulnerability",
-        path: "/excluir-vulnerabilidade/:id",
-        component: DeleteVulnerability,
+        name: "ShowVulnerability",
+        path: "/exibir-vulnerabilidade/:id",
+        component: ShowVulnerability,
       },
     ],
   },
