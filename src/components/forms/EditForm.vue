@@ -12,7 +12,7 @@
         <TextField
           :cols="6"
           placeholder="Afeta a segurança..."
-          label="Comentário"
+          label="Descrição"
           :valueField="vulnerability.comment"
           @update="vulnerability.comment = $event"
         />
@@ -144,7 +144,6 @@ export default {
         let newModalControler = {
           header: "Edição de Vulnerabilidade",
           messages: ["Tem certeza que deseja alterar o registro? "],
-          show: true,
         };
         this.action_setModalControler(newModalControler);
       } else {
@@ -163,7 +162,6 @@ export default {
             "Você está saindo da edição sem salvar os dados.",
             "Deseja continuar?",
           ],
-          show: true,
         };
         this.action_setModalControler(newModalControler);
       } else {
@@ -177,6 +175,12 @@ export default {
         this.goToHomePage();
       } else {
         this.action_updateVulnerability(this.updatedVulnerability);
+        this.action_changeMessageSnackBar({
+          message: "Vulnerabilidade alterada com sucesso!",
+          sucess: true,
+        });
+        this.action_resetModalControler();
+        this.goToHomePage();
       }
     },
     isDifferent() {
@@ -184,33 +188,32 @@ export default {
         newData = this.updatedVulnerability;
       let isDiff = false;
       Object.keys(oldData).forEach((name) => {
-        console.log(name);
         if (name === "evidences") {
-          console.log(oldData, newData);
           if (oldData.evidences.length === newData.evidences.length) {
             for (let i = 0; i < oldData.evidences.length; i++) {
-              if (oldData.evidences[i] !== newData.evidences[i]) {
-                console.log(
-                  "evidences1",
-                  oldData.evidences[i],
-                  oldData.evidences[i]
-                );
+              if (this.sameImage(oldData.evidences[i], newData.evidences[i])) {
                 isDiff = true;
                 return true;
               }
             }
           } else {
-            console.log(oldData.evidences, newData.evidences);
             isDiff = true;
             return true;
           }
         } else if (oldData[name] !== newData[name]) {
-          console.log(oldData[name], newData[name]);
           isDiff = true;
           return true;
         }
       });
       return isDiff;
+    },
+    sameImage(imageA, imageB) {
+      return !(
+        imageA.name !== imageB.name ||
+        imageA.size !== imageB.size ||
+        imageA.type !== imageB.type ||
+        imageA.lastModified !== imageB.lastModified
+      );
     },
   },
   computed: {

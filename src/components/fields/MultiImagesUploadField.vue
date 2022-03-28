@@ -34,6 +34,14 @@
         </span>
       </p>
     </div>
+    <div class="preview-label" v-show="uploadedImages.length > 0">
+      <div class="label-box">
+        <label>Prévida das Imagens:</label>
+      </div>
+      <div class="preview-box flex-justify-center">
+        <div id="preview" class="w-100 flex-justify-center" />
+      </div>
+    </div>
   </v-col>
 </template>
 
@@ -44,6 +52,7 @@ export default {
     label: String,
     cols: Number,
     height: Number,
+    images: Array,
   },
   data() {
     return {
@@ -57,15 +66,49 @@ export default {
     reset() {
       this.uploadedImages = [];
       this.uploadError = null;
+      let preview = document.getElementById("preview");
+      while (preview.firstChild) {
+        preview.removeChild(preview.firstChild);
+      }
     },
     filesChange() {
+      this.reset();
       this.uploadedImages = this.$refs.file.files;
       this.fileCount = this.$refs.file.files.length;
       this.$emit("update", this.uploadedImages);
+      this.handleImages(this.uploadedImages);
+    },
+    handleImages(files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        if (!file.type.startsWith("image/")) {
+          continue;
+        }
+
+        const preview = document.getElementById("preview");
+        const img = document.createElement("img");
+        img.classList.add("img");
+        img.file = file;
+        img.style.margin = "20px";
+        img.style.maxWidth = "700px";
+        preview.appendChild(img);
+
+        const reader = new FileReader();
+        reader.onload = (function (aImg) {
+          return function (e) {
+            aImg.src = e.target.result;
+          };
+        })(img);
+        reader.readAsDataURL(file);
+      }
     },
   },
   mounted() {
     this.reset();
+    if (this.images?.length > 0) {
+      this.uploadedImages = this.images;
+    }
   },
 };
 </script>
@@ -79,6 +122,28 @@ label {
 
 #multi-image-upload {
   margin-bottom: 8px;
+}
+
+.preview-label {
+  margin-top: 12px;
+}
+.preview-box {
+  max-height: 500px;
+  outline: 1px dashed $textColor;
+  background: $secondaryColor;
+  border-radius: 10px;
+  overflow: auto;
+  flex-wrap: wrap;
+}
+
+#preview {
+  width: 100%;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+
+img {
+  padding: 6px !important;
 }
 
 .label-box {

@@ -58,10 +58,6 @@ menu {
   transition: 0.5s;
 }
 
-.logo-box:hover {
-  background-color: $blackColor;
-}
-
 ul {
   width: 100%;
 }

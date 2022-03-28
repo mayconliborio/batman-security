@@ -4,6 +4,7 @@ import Template from "../views/Template";
 import HomePage from "../views/HomePage";
 import VulnerabilityRegistration from "../views/VulnerabilityRegistration";
 import UpdateVulnerability from "../views/UpdateVulnerability";
+import ShowVulnerability from "../views/ShowVulnerability";
 
 Vue.use(Router);
 
@@ -28,6 +29,11 @@ const routes = [
         name: "UpdateVulnerability",
         path: "/editar-vulnerabilidade/:id",
         component: UpdateVulnerability,
+      },
+      {
+        name: "ShowVulnerability",
+        path: "/exibir-vulnerabilidade/:id",
+        component: ShowVulnerability,
       },
     ],
   },

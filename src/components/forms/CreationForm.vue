@@ -5,21 +5,21 @@
         <TextField
           :cols="6"
           placeholder="Vulnerabilidade 1..."
-          @update="vulnerabilityTitle = $event"
+          @update="title = $event"
           label="Título"
         />
         <TextField
           :cols="6"
           placeholder="Afeta a segurança..."
-          @update="vulnerabilityTitle = $event"
-          label="Comentário"
+          @update="comment = $event"
+          label="Descrição"
         />
       </v-row>
 
       <v-row>
         <SelectField
           :col="6"
-          @update="vulnerabilityType = $event"
+          @update="type = $event"
           :items="vulnerabilityTypeList"
           label="Tipo de Vulnerabilidade"
         />
@@ -33,8 +33,8 @@
       <v-row>
         <MultiImagesUploadField
           :height="screenSize.heigth > 847 ? 250 : 200"
-          label="Evidências"
           @update="evidences = $event"
+          label="Evidências"
         />
       </v-row>
       <v-row>
@@ -51,11 +51,7 @@
           secondaryButton
           width="280"
           isForm
-          @click="
-            $router.push({
-              name: 'HomePage',
-            })
-          "
+          @click="goToHomePage()"
         />
         <DefaultButton
           icon="fas fa-plus"
@@ -63,6 +59,13 @@
           isForm
           width="280"
           @click="createVulnerability(updatedValues)"
+        />
+        <MessageModal
+          v-if="messageModalControler.show"
+          :title="messageModalControler.title"
+          :header="messageModalControler.header"
+          :messages="messageModalControler.messages"
+          @confirm="action_resetMessageModalControler()"
         />
       </v-row>
     </v-container>
@@ -74,46 +77,108 @@ import SelectField from "../fields/SelectField";
 import TextField from "../fields/TextField";
 import DefaultButton from "../buttons/DefaultButton";
 import GlobalData from "../../mixins/GlobalData";
+import GlobalMethods from "../../mixins/GlobalMethods";
 import TextAreaField from "../fields/TextAreaField";
 import MultiImagesUploadField from "../fields/MultiImagesUploadField";
+import MessageModal from "../modal/MessageModal";
 import { mapState, mapActions } from "vuex";
 
 export default {
   name: "CreationForm",
   components: {
+    MessageModal,
     MultiImagesUploadField,
     TextAreaField,
     DefaultButton,
     TextField,
     SelectField,
   },
-  mixins: [GlobalData],
+  mixins: [GlobalData, GlobalMethods],
   data() {
     return {
-      vulnerabilityTitle: String,
-      vulnerabilityType: {},
+      title: "",
+      comment: "",
+      type: "",
       criticalityLevel: {},
       evidences: {},
-      solutionProposal: String,
+      solutionProposal: "",
     };
   },
   methods: {
-    ...mapActions(["action_changeMessageSnackBar"]),
+    ...mapActions([
+      "action_changeMessageSnackBar",
+      "action_createVulnerability",
+      "action_setMessageModalControler",
+      "action_resetMessageModalControler",
+    ]),
     createVulnerability() {
-      //lógica para validar campos obrigatórios
-      console.log("Cadastrando vulnerabilidade...");
+      let validate = this.checkValidity();
+
+      if (validate.isValid) {
+        this.action_createVulnerability(this.updatedValues);
+        this.action_changeMessageSnackBar({
+          message: "Vulnerabilidade cadastrada com sucesso!",
+          sucess: true,
+        });
+        this.goToHomePage();
+      } else {
+        this.action_setMessageModalControler(validate.messageModalControler);
+      }
+    },
+    checkValidity() {
+      let validate = {
+        isValid: true,
+        messageModalControler: {
+          header: "Cadastro de Vulnerabilidade",
+          title: "Atenção, os seguintes campos são obrigatórios:",
+          messages: [],
+        },
+      };
+      let messages = [];
+
+      if (!this.title) {
+        messages.push("Título");
+        validate.isValid = false;
+      }
+      if (!this.comment) {
+        messages.push("Descrição");
+        validate.isValid = false;
+      }
+      if (this.criticalityLevel.value === 0) {
+        messages.push("Grau de Criticidade");
+        validate.isValid = false;
+      }
+      if (this.type.value === 0) {
+        messages.push("Tipo de Vulnerabilidade");
+        validate.isValid = false;
+      }
+      if (this.type.value === 2 && !this.evidences.length) {
+        messages.push("Evidencias (Quando tipo = SAST)");
+        validate.isValid = false;
+      }
+      if (!this.solutionProposal) {
+        messages.push("Solução Proposta");
+        validate.isValid = false;
+      }
+      validate.messageModalControler.messages = messages;
+      return validate;
     },
   },
   computed: {
     ...mapState({
       screenSize: (state) => state.screenSize,
       id: (state) => state.vulnerabilitiesIndex,
+      messageModalControler: (state) => state.messageModalControler,
     }),
     updatedValues() {
       return {
-        vulnerabilityTitle: this.vulnerabilityTitle,
-        vulnerabilityType: this.vulnerabilityType,
-        criticalityLevel: this.criticalityLevel,
+        id: this.id,
+        title: this.title,
+        comment: this.comment,
+        type: this.type.value,
+        criticalityLevel: this.criticalityLevel.value,
+        evidences: this.evidences,
+        solutionProposal: this.solutionProposal,
       };
     },
   },

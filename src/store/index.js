@@ -14,6 +14,12 @@ export default new Vuex.Store({
       header: "",
       messages: [],
     },
+    messageModalControler: {
+      show: false,
+      header: "",
+      title: "",
+      messages: [],
+    },
     snackBar: {
       show: false,
       message: "",
@@ -24,7 +30,7 @@ export default new Vuex.Store({
       type: 0,
       criticalityLevel: 0,
     },
-    filteredVulnerabilitiesIndex: 0,
+    vulnerabilitiesIndex: 0,
     vulnerabilities: [],
     activeVulnerability: {
       id: 0,
@@ -88,7 +94,21 @@ export default new Vuex.Store({
     setModalControler(state, payload) {
       state.modalControler.header = payload.header;
       state.modalControler.messages = payload.messages;
-      state.modalControler.show = payload.show;
+      state.modalControler.show = true;
+    },
+    resetMessageModalControler(state) {
+      state.messageModalControler = {
+        show: false,
+        title: "",
+        header: "",
+        messages: [""],
+      };
+    },
+    setMessageModalControler(state, payload) {
+      state.messageModalControler.header = payload.header;
+      state.messageModalControler.title = payload.title;
+      state.messageModalControler.messages = payload.messages;
+      state.messageModalControler.show = true;
     },
     setMessageSnackBar(state, payload) {
       state.snackBar.show = true;
@@ -122,6 +142,13 @@ export default new Vuex.Store({
     },
     action_setModalControler(context, payload) {
       context.commit("setModalControler", payload);
+    },
+    action_resetMessageModalControler(context) {
+      context.commit("resetMessageModalControler");
+    },
+    action_setMessageModalControler(context, payload) {
+      context.commit("setMessageModalControler", payload);
+      console.log(payload);
     },
     action_changeMessageSnackBar(context, payload) {
       context.commit("setMessageSnackBar", payload);

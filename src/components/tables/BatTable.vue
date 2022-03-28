@@ -75,7 +75,7 @@ export default {
       "action_deleteVulnerability",
     ]),
     modifiedItem(vulnerability) {
-      let vul = JSON.parse(JSON.stringify(vulnerability));
+      let vul = { ...vulnerability };
 
       vul.criticalityLevel = {
         value: vulnerability.criticalityLevel,
@@ -92,7 +92,10 @@ export default {
         this.otherButton = !this.otherButton;
         return;
       }
-      //lógica para exibir item
+      this.$router.push({
+        name: "ShowVulnerability",
+        params: { id: item.id },
+      });
       console.log("Abrindo item: ", item);
     },
     editVulnerability(item) {

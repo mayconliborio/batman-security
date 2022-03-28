@@ -14,16 +14,6 @@ import { mapActions } from "vuex";
 export default {
   created() {
     window.addEventListener("resize", this.action_screenResize);
-    let vul = {
-      id: 1,
-      title: "Teste",
-      criticalityLevel: 3,
-      type: 3,
-      evidences: [],
-      comment: "Comentario",
-      solutionProposal: "Lorem Ipsum",
-    };
-    this.action_createVulnerability(vul);
   },
   methods: {
     ...mapActions([

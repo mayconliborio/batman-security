@@ -55,7 +55,6 @@ export default {
   methods: {
     ...mapActions(["action_setFilters"]),
     searchVulnerabilities() {
-      console.log("opa");
       this.action_setFilters(this.filters);
     },
   },
