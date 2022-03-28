@@ -23,7 +23,7 @@
       <div
         v-for="vulnerability in getFilteredVulnerabilities"
         class="w-100"
-        :key="vulnerability.id"
+        :key="vulnerability.id + Math.random().toString(16).slice(2)"
       >
         <VulnerabilityRow
           :vulnerability="modifiedItem(vulnerability)"
@@ -96,14 +96,10 @@ export default {
         name: "ShowVulnerability",
         params: { id: item.id },
       });
-      console.log("Abrindo item: ", item);
     },
     editVulnerability(item) {
       this.otherButton = true;
-      this.$router.push({
-        name: "UpdateVulnerability",
-        params: { id: item.id },
-      });
+      this.$router.push({ path: `/editar-vulnerabilidade/${item.id}` });
     },
     deleteVulnerability(item) {
       this.otherButton = true;

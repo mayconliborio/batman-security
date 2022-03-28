@@ -191,7 +191,7 @@ export default {
         if (name === "evidences") {
           if (oldData.evidences.length === newData.evidences.length) {
             for (let i = 0; i < oldData.evidences.length; i++) {
-              if (this.sameImage(oldData.evidences[i], newData.evidences[i])) {
+              if (oldData.evidences[i] !== newData.evidences[i]) {
                 isDiff = true;
                 return true;
               }
@@ -206,14 +206,6 @@ export default {
         }
       });
       return isDiff;
-    },
-    sameImage(imageA, imageB) {
-      return !(
-        imageA.name !== imageB.name ||
-        imageA.size !== imageB.size ||
-        imageA.type !== imageB.type ||
-        imageA.lastModified !== imageB.lastModified
-      );
     },
   },
   computed: {

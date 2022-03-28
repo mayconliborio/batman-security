@@ -7,18 +7,21 @@
       <ul class="w-100">
         <MenuItem
           :name="'Página Principal'"
-          route_name="HomePage"
+          :route_name="{ name: 'HomePage', params: { id: Number } }"
           :icon="'fas fa-home'"
         />
         <MenuItem
           :name="'Cadastro de Vulnerabilidade'"
-          route_name="VulnerabilityRegistration"
+          :route_name="{
+            name: 'VulnerabilityRegistration',
+            params: { id: Number },
+          }"
           :icon="'fas fa-plus'"
         />
         <MenuItem
           notClickable
           :name="'Ediçao de Vulnerabilidade'"
-          route_name="UpdateVulnerability"
+          :route_name="{ name: 'UpdateVulnerability', params: { id: Number } }"
           :icon="'fas fa-pen'"
         />
       </ul>

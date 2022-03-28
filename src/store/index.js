@@ -30,14 +30,15 @@ export default new Vuex.Store({
       type: 0,
       criticalityLevel: 0,
     },
-    vulnerabilitiesIndex: 0,
-    vulnerabilities: [],
+    vulnerabilitiesIndex:
+      JSON.parse(localStorage.getItem("vulnerabilitiesIndex")) || 1,
+    vulnerabilities: JSON.parse(localStorage.getItem("vulnerabilities")) || [],
     activeVulnerability: {
       id: 0,
       title: "",
       comment: "",
       type: 0,
-      criticalityLevel: 0,
+      criticalityLevel: 10,
       solutionProposal: "",
       evidences: [],
     },
@@ -53,14 +54,17 @@ export default new Vuex.Store({
     getFilteredVulnerabilities: (state) => {
       let filters = state.filters;
       let filteredVulnerabilities = state.vulnerabilities;
+
       function titleFilter(vul) {
         let str = vul.title.toLowerCase();
         let substr = filters.title.toLowerCase();
         return str.indexOf(substr) > -1;
       }
+
       function typeFilter(vul) {
         return vul.type === filters.type;
       }
+
       function criticalityLevelFilter(vul) {
         return vul.criticalityLevel === filters.criticalityLevel;
       }
@@ -122,9 +126,14 @@ export default new Vuex.Store({
     },
     setVulnerabilities(state, payload) {
       state.vulnerabilities = payload;
+      localStorage.setItem("vulnerabilities", JSON.stringify(payload));
     },
     incrementVulnerabilitiesIndex(state) {
       state.vulnerabilitiesIndex++;
+      localStorage.setItem(
+        "vulnerabilitiesIndex",
+        JSON.stringify(state.vulnerabilitiesIndex)
+      );
     },
     setActiveVulnerability(state, payload) {
       state.activeVulnerability = payload;
@@ -148,7 +157,6 @@ export default new Vuex.Store({
     },
     action_setMessageModalControler(context, payload) {
       context.commit("setMessageModalControler", payload);
-      console.log(payload);
     },
     action_changeMessageSnackBar(context, payload) {
       context.commit("setMessageSnackBar", payload);
@@ -165,7 +173,7 @@ export default new Vuex.Store({
     },
     action_updateVulnerability(context, payload) {
       if (context.state.vulnerabilities.length > 0) {
-        let index = context.getters.getVulnerabilityIndexById(payload);
+        let index = context.getters.getVulnerabilityIndexById(payload.id);
         let vulnerabilities = context.state.vulnerabilities;
 
         vulnerabilities.splice(index, 1, payload);

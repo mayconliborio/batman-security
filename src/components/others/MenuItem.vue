@@ -2,7 +2,7 @@
   <router-link
     :key="name"
     tag="li"
-    :to="route_name ? { name: route_name, params: { id: Number } } : ''"
+    :to="route_name"
     class="flex-justify-start radius-12"
     :class="notClickable ? 'is-not-clickable' : ' is-clickable'"
   >
@@ -17,7 +17,7 @@ export default {
   name: "MenuItem",
   props: {
     name: String,
-    route_name: String,
+    route_name: [Object, String],
     icon: String,
     notClickable: Boolean,
   },

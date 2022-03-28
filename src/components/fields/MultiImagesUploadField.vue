@@ -39,7 +39,14 @@
         <label>Prévida das Imagens:</label>
       </div>
       <div class="preview-box flex-justify-center">
-        <div id="preview" class="w-100 flex-justify-center" />
+        <div id="preview" class="w-100 flex-justify-center">
+          <img
+            v-for="(image, index) in uploadedImages"
+            :key="index"
+            :src="image"
+            alt=""
+          />
+        </div>
       </div>
     </div>
   </v-col>
@@ -52,36 +59,61 @@ export default {
     label: String,
     cols: Number,
     height: Number,
-    images: Array,
+    valueField: Array,
   },
   data() {
     return {
       uploadedImages: [],
+      loadImages: 0,
       uploadError: null,
       uploadFieldName: "images",
       fileCount: 0,
     };
   },
+  watch: {
+    valueField: {
+      immediate: true,
+      handler(newText, oldText) {
+        if ((newText === "" || newText) && newText !== oldText) {
+          if (this.loadImages === 0) {
+            this.uploadedImages = newText;
+            this.loadImages++;
+          }
+        }
+      },
+    },
+  },
   methods: {
     reset() {
       this.uploadedImages = [];
       this.uploadError = null;
-      let preview = document.getElementById("preview");
-      while (preview.firstChild) {
-        preview.removeChild(preview.firstChild);
-      }
     },
     filesChange() {
       this.reset();
-      this.uploadedImages = this.$refs.file.files;
+      let files = this.$refs.file.files;
       this.fileCount = this.$refs.file.files.length;
+      this.toBase64Images(files);
+    },
+    toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    },
+    toBase64Images(images) {
+      this.uploadedImages = [];
+      for (let i = 0; i < images.length; i++) {
+        this.toBase64(images[i]).then((data) => {
+          this.uploadedImages.push(data);
+        });
+      }
       this.$emit("update", this.uploadedImages);
-      this.handleImages(this.uploadedImages);
     },
     handleImages(files) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-
         if (!file.type.startsWith("image/")) {
           continue;
         }
@@ -103,12 +135,6 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-  },
-  mounted() {
-    this.reset();
-    if (this.images?.length > 0) {
-      this.uploadedImages = this.images;
-    }
   },
 };
 </script>
