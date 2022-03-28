@@ -5,18 +5,18 @@
         <TextField
           cols="4"
           placeholder="Vulnerabilidade 1..."
-          @update="vulnerabilityTitle = $event"
+          @update="title = $event"
           label="Título"
         />
         <SelectField
           :col="3"
-          :items="criticalityLevelList"
           @update="criticalityLevel = $event"
+          :items="criticalityLevelList"
           label="Grau de Criticidade"
         />
         <SelectField
           :col="3"
-          @update="vulnerabilityType = $event"
+          @update="type = $event"
           :items="vulnerabilityTypeList"
           label="Tipo de Vulnerabilidade"
         />
@@ -24,7 +24,7 @@
           icon="fas fa-search"
           text="Buscar"
           isForm
-          @click="$emit('searchVulnerabilities', updatedValues)"
+          @click="searchVulnerabilities"
         />
       </v-row>
     </v-container>
@@ -36,6 +36,7 @@ import SelectField from "../fields/SelectField";
 import TextField from "../fields/TextField";
 import DefaultButton from "../buttons/DefaultButton";
 import GlobalData from "../../mixins/GlobalData";
+import { mapActions } from "vuex";
 
 export default {
   name: "SearchForm",
@@ -43,17 +44,27 @@ export default {
   mixins: [GlobalData],
   data() {
     return {
-      vulnerabilityTitle: String,
-      vulnerabilityType: {},
+      title: String,
+      type: {},
       criticalityLevel: {},
     };
   },
+  mounted() {
+    this.searchVulnerabilities();
+  },
+  methods: {
+    ...mapActions(["action_setFilters"]),
+    searchVulnerabilities() {
+      console.log("opa");
+      this.action_setFilters(this.filters);
+    },
+  },
   computed: {
-    updatedValues() {
+    filters() {
       return {
-        vulnerabilityTitle: this.vulnerabilityTitle,
-        vulnerabilityType: this.vulnerabilityType,
-        criticalityLevel: this.criticalityLevel,
+        title: this.title,
+        type: this.type.value,
+        criticalityLevel: this.criticalityLevel.value,
       };
     },
   },

@@ -19,31 +19,58 @@ export default new Vuex.Store({
       message: "",
       sucess: false,
     },
-    vulnerabilitiesIndex: 0,
-    vulnerabilities: [
-      {
-        id: 1,
-        title: "Title",
-        criticalityLevel: 3,
-        type: 3,
-        evidences: [],
-        comment: "Comentario",
-        solutionProposal: "Lorem Ipsum",
-      },
-    ],
+    filters: {
+      title: "",
+      type: 0,
+      criticalityLevel: 0,
+    },
+    filteredVulnerabilitiesIndex: 0,
+    vulnerabilities: [],
+    activeVulnerability: {
+      id: 0,
+      title: "",
+      comment: "",
+      type: 0,
+      criticalityLevel: 0,
+      solutionProposal: "",
+      evidences: [],
+    },
   }),
   getters: {
-    getVulnerabilityById: (state) => (id) => {
-      return state.vulnerabilities.find(
-        (vulnerability) => vulnerability.id === parseInt(id)
-      );
-    },
     getVulnerabilityIndexById: (state) => (id) => {
       return state.vulnerabilities
         .map((vul) => {
           return vul.id;
         })
         .indexOf(id);
+    },
+    getFilteredVulnerabilities: (state) => {
+      let filters = state.filters;
+      let filteredVulnerabilities = state.vulnerabilities;
+      function titleFilter(vul) {
+        let str = vul.title.toLowerCase();
+        let substr = filters.title.toLowerCase();
+        return str.indexOf(substr) > -1;
+      }
+      function typeFilter(vul) {
+        return vul.type === filters.type;
+      }
+      function criticalityLevelFilter(vul) {
+        return vul.criticalityLevel === filters.criticalityLevel;
+      }
+
+      if (filters.title) {
+        filteredVulnerabilities = filteredVulnerabilities.filter(titleFilter);
+      }
+      if (filters.type) {
+        filteredVulnerabilities = filteredVulnerabilities.filter(typeFilter);
+      }
+      if (filters.criticalityLevel) {
+        filteredVulnerabilities = filteredVulnerabilities.filter(
+          criticalityLevelFilter
+        );
+      }
+      return filteredVulnerabilities;
     },
   },
   mutations: {
@@ -79,6 +106,12 @@ export default new Vuex.Store({
     incrementVulnerabilitiesIndex(state) {
       state.vulnerabilitiesIndex++;
     },
+    setActiveVulnerability(state, payload) {
+      state.activeVulnerability = payload;
+    },
+    setFilters(state, payload) {
+      state.filters = payload;
+    },
   },
   actions: {
     action_screenResize(context) {
@@ -94,10 +127,13 @@ export default new Vuex.Store({
       context.commit("setMessageSnackBar", payload);
       setTimeout(() => context.commit("resetMessageSnackbar"), 5000);
     },
+    action_setFilters(context, payload) {
+      context.commit("setFilters", payload);
+    },
     action_createVulnerability(context, payload) {
-      let vulnerabilities = context.state.vulnerabilities;
+      let vulnerabilities = context.state.vulnerabilities || [];
       vulnerabilities.push(payload);
-      context.commit("setVulnerabilities");
+      context.commit("setVulnerabilities", vulnerabilities);
       context.commit("incrementVulnerabilitiesIndex");
     },
     action_updateVulnerability(context, payload) {
@@ -119,6 +155,27 @@ export default new Vuex.Store({
 
       vulnerabilities.splice(index, 1);
       context.commit("setVulnerabilities", vulnerabilities);
+    },
+    action_setActiveVulnerability(context, payload) {
+      let vulnerabilities = context.state.vulnerabilities;
+      let find = () => {
+        for (let vuln in vulnerabilities) {
+          let v = vulnerabilities[vuln];
+          if (v.id === payload) {
+            return v;
+          }
+        }
+        return undefined;
+      };
+      let vuln = find();
+      if (!vuln) {
+        let message = {
+          message: "Erro ao acessar vulnerabilidade!",
+          sucess: false,
+        };
+        context.dispatch("action_changeMessageSnackBar", message);
+      }
+      context.commit("setActiveVulnerability", vuln);
     },
   },
   modules: {},

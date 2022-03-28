@@ -100,7 +100,7 @@ export default {
   methods: {
     ...mapActions(["action_changeMessageSnackBar"]),
     createVulnerability() {
-      //validar campos obrigatórios
+      //lógica para validar campos obrigatórios
       console.log("Cadastrando vulnerabilidade...");
     },
   },

@@ -58,7 +58,6 @@ export default {
       this.select = this.valueField;
     }
     if (!this.rules) {
-      console.log("visao");
       this.$emit("update", this.select);
     }
     this.keyField++;

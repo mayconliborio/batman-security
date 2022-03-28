@@ -5,16 +5,16 @@
         <TextField
           :cols="6"
           placeholder="Vulnerabilidade 1..."
-          @update="vulnerabilityTitle = $event"
-          :valueField="newVulnerability.title"
           label="Título"
+          :valueField="vulnerability.title"
+          @update="vulnerability.title = $event"
         />
         <TextField
           :cols="6"
           placeholder="Afeta a segurança..."
-          :valueField="newVulnerability.comment"
-          @update="vulnerabilityComment = $event"
           label="Comentário"
+          :valueField="vulnerability.comment"
+          @update="vulnerability.comment = $event"
         />
       </v-row>
 
@@ -23,31 +23,35 @@
           :col="6"
           :items="vulnerabilityTypeList"
           label="Tipo de Vulnerabilidade"
-          :valueField="{ value: newVulnerability.type }"
-          @update="vulnerabilityType = $event"
+          key-name="name"
+          key-value="value"
+          :valueField="{ value: selectedType }"
+          @update="vulnerability.type = $event"
         />
         <SelectField
           :col="6"
           :items="criticalityLevelList"
           label="Grau de Criticidade"
-          :valueField="{ value: newVulnerability.criticalityLevel, name: 'ho' }"
-          @update="criticalityLevel = $event"
+          key-name="name"
+          key-value="value"
+          :valueField="{ value: selectedcriticalityLevel }"
+          @update="vulnerability.criticalityLevel = $event"
         />
       </v-row>
       <v-row>
         <MultiImagesUploadField
           :height="screenSize.heigth > 847 ? 250 : 200"
           label="Evidências"
-          :valueField="newVulnerability.evidences"
-          @update="evidences = $event"
+          :valueField="vulnerability.evidences"
+          @update="vulnerability.evidences = $event"
         />
       </v-row>
       <v-row>
         <TextAreaField
           label="Solução Proposta"
           :rows="screenSize.heigth > 847 ? 5 : 4"
-          :valueField="newVulnerability.solutionProposal"
-          @update="solutionProposal = $event"
+          :valueField="vulnerability.solutionProposal"
+          @update="vulnerability.solutionProposal = $event"
         />
       </v-row>
       <v-row class="w-100 flex-justify-around">
@@ -91,7 +95,7 @@ import DefaultButton from "../buttons/DefaultButton";
 import GlobalData from "../../mixins/GlobalData";
 import TextAreaField from "../fields/TextAreaField";
 import MultiImagesUploadField from "../fields/MultiImagesUploadField";
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapActions, mapState } from "vuex";
 import ConfirmationModal from "../modal/ConfirmationModal";
 import GlobalMethods from "../../mixins/GlobalMethods";
 
@@ -106,39 +110,43 @@ export default {
     SelectField,
   },
   mixins: [GlobalData, GlobalMethods],
-  props: {
-    vulnerability: {},
-  },
   data() {
     return {
-      newVulnerability: {},
-      oldVulnerability: {},
-      vulnerabilityTitle: "",
-      vulnerabilityComment: "",
-      vulnerabilityType: 0,
+      title: "",
+      comment: "",
+      type: 0,
       criticalityLevel: 0,
       evidences: [],
       solutionProposal: "",
       backAction: false,
+      vulnerability: {},
+      selectedType: 0,
+      selectedcriticalityLevel: 0,
     };
   },
   mounted() {
-    let id = this.$route.params;
-    let vulnerability = this.getVulnerabilityById(id.id);
-    this.oldVulnerability = JSON.parse(JSON.stringify(vulnerability));
-    this.newVulnerability = JSON.parse(JSON.stringify(vulnerability));
+    let id = this.$route.params.id;
+    this.action_setActiveVulnerability(parseInt(id));
+    this.vulnerability = { ...this.activeVulnerability };
+    this.selectedType = this.vulnerability.type;
+    this.selectedcriticalityLevel = this.vulnerability.criticalityLevel;
   },
   methods: {
     ...mapActions([
       "action_setModalControler",
       "action_resetModalControler",
       "action_changeMessageSnackBar",
+      "action_setActiveVulnerability",
+      "action_updateVulnerability",
     ]),
     saveEditedVulnerability() {
-      //validar campos obrigatórios
-      //....
       if (this.isDifferent()) {
-        console.log(true);
+        let newModalControler = {
+          header: "Edição de Vulnerabilidade",
+          messages: ["Tem certeza que deseja alterar o registro? "],
+          show: true,
+        };
+        this.action_setModalControler(newModalControler);
       } else {
         this.action_changeMessageSnackBar({
           message: "Nenhum dado foi alterado!",
@@ -168,58 +176,60 @@ export default {
         this.action_resetModalControler();
         this.goToHomePage();
       } else {
-        console.log("ho OH");
+        this.action_updateVulnerability(this.updatedVulnerability);
       }
     },
     isDifferent() {
-      let oldData = JSON.parse(JSON.stringify(this.oldVulnerability));
-      let newData = JSON.parse(JSON.stringify(this.updatedVulnerability()));
+      let oldData = this.activeVulnerability,
+        newData = this.updatedVulnerability;
       let isDiff = false;
       Object.keys(oldData).forEach((name) => {
+        console.log(name);
         if (name === "evidences") {
+          console.log(oldData, newData);
           if (oldData.evidences.length === newData.evidences.length) {
             for (let i = 0; i < oldData.evidences.length; i++) {
               if (oldData.evidences[i] !== newData.evidences[i]) {
                 console.log(
-                  "Evidences: ",
+                  "evidences1",
                   oldData.evidences[i],
-                  newData.evidences[i]
+                  oldData.evidences[i]
                 );
                 isDiff = true;
                 return true;
               }
             }
           } else {
+            console.log(oldData.evidences, newData.evidences);
             isDiff = true;
             return true;
           }
         } else if (oldData[name] !== newData[name]) {
+          console.log(oldData[name], newData[name]);
           isDiff = true;
           return true;
         }
       });
       return isDiff;
     },
-    updatedVulnerability() {
-      return {
-        id: this.vulnerability.id,
-        title: this.vulnerabilityTitle,
-        comment: this.vulnerabilityComment,
-        type: this.vulnerabilityType.value,
-        criticalityLevel: this.criticalityLevel.value,
-        solutionProposal: "Lorem Ipsum",
-        evidences: [],
-      };
-    },
   },
   computed: {
     ...mapState({
       screenSize: (state) => state.screenSize,
       modalControler: (state) => state.modalControler,
+      activeVulnerability: (state) => state.activeVulnerability,
     }),
-    ...mapGetters({
-      getVulnerabilityById: "getVulnerabilityById",
-    }),
+    updatedVulnerability() {
+      return {
+        id: this.vulnerability.id,
+        title: this.vulnerability.title,
+        comment: this.vulnerability.comment,
+        type: this.vulnerability.type.value,
+        criticalityLevel: this.vulnerability.criticalityLevel.value,
+        solutionProposal: this.vulnerability.solutionProposal,
+        evidences: this.vulnerability.evidences,
+      };
+    },
   },
 };
 </script>

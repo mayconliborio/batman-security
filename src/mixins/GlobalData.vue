@@ -5,7 +5,7 @@ export default {
       criticalityLevelList: [
         {
           name: "Selecione",
-          value: undefined,
+          value: 0,
         },
         {
           name: "Low",

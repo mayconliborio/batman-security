@@ -18,7 +18,7 @@
       <SearchForm @searchVulnerabilities="searchVulnerabilities($event)" />
     </div>
     <div id="tabela">
-      <BatTable :header="tableHeader" :items="vulnerabilities" />
+      <BatTable />
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@
 import DefaultButton from "../components/buttons/DefaultButton.vue";
 import BatTable from "../components/tables/BatTable";
 import SearchForm from "../components/forms/SearchForm";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "HomePage",
@@ -38,28 +38,13 @@ export default {
         width: document.documentElement.clientWidth,
         heigth: document.documentElement.clientHeight,
       },
-      tableHeader: [
-        { title: "GRAU", width: 10 },
-        { title: "TÍTULO", width: 25 },
-        { title: "TIPO", width: 20 },
-        { title: "EVIDÊNCIA", width: 25 },
-      ],
     };
-  },
-  methods: {
-    searchVulnerabilities(searchData) {
-      console.log(
-        "Buscando vulnerabilidades: ",
-        searchData.vulnerabilityTitle,
-        searchData.criticalityLevel.value,
-        searchData.vulnerabilityType.value
-      );
-    },
   },
   computed: {
     ...mapState({
       vulnerabilities: (state) => state.vulnerabilities,
     }),
+    ...mapGetters(["getFilteredVulnerabilities"]),
   },
 };
 </script>

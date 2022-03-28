@@ -21,7 +21,7 @@
     />
     <div class="table-rows w-100 flex-column-center">
       <div
-        v-for="vulnerability in vulnerabilities"
+        v-for="vulnerability in getFilteredVulnerabilities"
         class="w-100"
         :key="vulnerability.id"
       >
@@ -34,7 +34,7 @@
       </div>
       <span
         class="text-primary table-content"
-        v-if="vulnerabilities.length === 0"
+        v-if="!getFilteredVulnerabilities.length"
       >
         Nenhuma vulnerabilidade encontrada!
       </span>
@@ -47,7 +47,7 @@ import VulnerabilityRow from "../rows/VulnerabilityRow";
 import ConfirmationModal from "../modal/ConfirmationModal";
 import GlobalData from "../../mixins/GlobalData";
 import GlobalMethods from "../../mixins/GlobalMethods";
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 
 export default {
   name: "BatTable",
@@ -55,11 +55,16 @@ export default {
   data() {
     return {
       activeVulnerability: {},
+      header: [
+        { title: "GRAU", width: 10 },
+        { title: "TÍTULO", width: 25 },
+        { title: "TIPO", width: 20 },
+        { title: "EVIDÊNCIA", width: 25 },
+      ],
     };
   },
   components: { ConfirmationModal, VulnerabilityRow },
   props: {
-    header: {},
     items: {},
   },
   methods: {
@@ -70,23 +75,24 @@ export default {
       "action_deleteVulnerability",
     ]),
     modifiedItem(vulnerability) {
-      let modifiedItem = { ...vulnerability };
+      let vul = JSON.parse(JSON.stringify(vulnerability));
 
-      modifiedItem.criticalityLevel = {
+      vul.criticalityLevel = {
         value: vulnerability.criticalityLevel,
         name: this.getCriticalityLevelName(vulnerability.criticalityLevel),
       };
-      modifiedItem.type = {
+      vul.type = {
         value: vulnerability.type,
         name: this.getVulnerabilityTypeName(vulnerability.type),
       };
-      return { ...modifiedItem, edit: "fas fa-pen", delete: "fas fa-trash" };
+      return { ...vul, edit: "fas fa-pen", delete: "fas fa-trash" };
     },
     showVulnerability(item) {
       if (this.otherButton) {
         this.otherButton = !this.otherButton;
         return;
       }
+      //lógica para exibir item
       console.log("Abrindo item: ", item);
     },
     editVulnerability(item) {
@@ -124,6 +130,7 @@ export default {
       modalControler: (state) => state.modalControler,
       vulnerabilities: (state) => state.vulnerabilities,
     }),
+    ...mapGetters(["getFilteredVulnerabilities"]),
   },
 };
 </script>

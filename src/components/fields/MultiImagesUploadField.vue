@@ -20,7 +20,7 @@
       <p v-if="true">
         <i class="fas fa-paperclip text-primary"></i><br />
         <span v-if="!fileCount">
-          Arraste e solte aqui arquivos
+          Arraste e solte aqui os arquivos
           <span class="text-primary">.png</span> ou
           <span class="text-primary">.jpg</span><br />ou clique aqui para
           selecionar os arquivos do seu computador
