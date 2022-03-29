@@ -7,22 +7,15 @@
       <ul class="w-100">
         <MenuItem
           :name="'Página Principal'"
-          :route_name="{ name: 'HomePage', params: { id: Number } }"
+          :route_name="{ name: 'HomePage' }"
           :icon="'fas fa-home'"
         />
         <MenuItem
           :name="'Cadastro de Vulnerabilidade'"
           :route_name="{
             name: 'VulnerabilityRegistration',
-            params: { id: Number },
           }"
           :icon="'fas fa-plus'"
-        />
-        <MenuItem
-          notClickable
-          :name="'Ediçao de Vulnerabilidade'"
-          :route_name="{ name: 'UpdateVulnerability', params: { id: Number } }"
-          :icon="'fas fa-pen'"
         />
       </ul>
     </div>
@@ -34,10 +27,28 @@
 
 <script>
 import MenuItem from "../components/others/MenuItem";
+import GlobalMethods from "../mixins/GlobalMethods";
+import { mapState } from "vuex";
 
 export default {
   name: "Menu",
   components: { MenuItem },
+  mixins: [GlobalMethods],
+  computed: {
+    ...mapState({
+      goBackHome: (state) => state.goBackHome,
+    }),
+    backHome() {
+      return this.goBackHome;
+    },
+  },
+  watch: {
+    backHome(newValue) {
+      if (newValue === true) {
+        this.goToHomePage();
+      }
+    },
+  },
 };
 </script>
 

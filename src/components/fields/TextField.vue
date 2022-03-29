@@ -147,4 +147,8 @@ label {
 .container-input {
   display: flex;
 }
+
+.theme--light.v-input.text-field input::placeholder {
+  color: $placeholderColor;
+}
 </style>
