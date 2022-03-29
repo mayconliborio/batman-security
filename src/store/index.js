@@ -42,6 +42,7 @@ export default new Vuex.Store({
       solutionProposal: "",
       evidences: [],
     },
+    goBackHome: false,
   }),
   getters: {
     getVulnerabilityIndexById: (state) => (id) => {
@@ -141,6 +142,9 @@ export default new Vuex.Store({
     setFilters(state, payload) {
       state.filters = payload;
     },
+    setGoBackHome(state, payload) {
+      state.goBackHome = payload;
+    },
   },
   actions: {
     action_screenResize(context) {
@@ -157,6 +161,9 @@ export default new Vuex.Store({
     },
     action_setMessageModalControler(context, payload) {
       context.commit("setMessageModalControler", payload);
+    },
+    action_setGoBackHome(context, payload) {
+      context.commit("setGoBackHome", payload);
     },
     action_changeMessageSnackBar(context, payload) {
       context.commit("setMessageSnackBar", payload);
@@ -205,10 +212,11 @@ export default new Vuex.Store({
       let vuln = find();
       if (!vuln) {
         let message = {
-          message: "Erro ao acessar vulnerabilidade!",
+          message: "Erro ao acessar vulnerabilidade, tente novamente!",
           sucess: false,
         };
         context.dispatch("action_changeMessageSnackBar", message);
+        context.commit("setGoBackHome", true);
       }
       context.commit("setActiveVulnerability", vuln);
     },

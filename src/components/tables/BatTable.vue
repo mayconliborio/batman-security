@@ -157,8 +157,4 @@ h2 {
 .table-header {
   padding-left: 6px;
 }
-
-.text-primary {
-  color: $primaryColor;
-}
 </style>

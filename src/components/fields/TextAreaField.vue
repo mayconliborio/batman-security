@@ -158,4 +158,8 @@ label {
   caret-color: $primaryColor !important;
   font-family: "Roboto Black", sans-serif !important;
 }
+
+.theme--light.v-input.text-field input::placeholder {
+  color: $placeholderColor;
+}
 </style>

@@ -25,7 +25,7 @@
           label="Tipo de Vulnerabilidade"
           key-name="name"
           key-value="value"
-          :valueField="{ value: selectedType }"
+          :valueField="{ value: activeVulnerability.type }"
           @update="vulnerability.type = $event"
         />
         <SelectField
@@ -34,15 +34,15 @@
           label="Grau de Criticidade"
           key-name="name"
           key-value="value"
-          :valueField="{ value: selectedcriticalityLevel }"
           @update="vulnerability.criticalityLevel = $event"
+          :valueField="{ value: activeVulnerability.criticalityLevel }"
         />
       </v-row>
       <v-row>
         <MultiImagesUploadField
           :height="screenSize.heigth > 847 ? 250 : 200"
           label="Evidências"
-          :valueField="vulnerability.evidences"
+          :images="vulnerability.evidences"
           @update="vulnerability.evidences = $event"
         />
       </v-row>
@@ -120,16 +120,12 @@ export default {
       solutionProposal: "",
       backAction: false,
       vulnerability: {},
-      selectedType: 0,
-      selectedcriticalityLevel: 0,
     };
   },
   mounted() {
     let id = this.$route.params.id;
     this.action_setActiveVulnerability(parseInt(id));
     this.vulnerability = { ...this.activeVulnerability };
-    this.selectedType = this.vulnerability.type;
-    this.selectedcriticalityLevel = this.vulnerability.criticalityLevel;
   },
   methods: {
     ...mapActions([
@@ -219,8 +215,10 @@ export default {
         id: this.vulnerability.id,
         title: this.vulnerability.title,
         comment: this.vulnerability.comment,
-        type: this.vulnerability.type.value,
-        criticalityLevel: this.vulnerability.criticalityLevel.value,
+        type: this.vulnerability.type.value || this.vulnerability.type,
+        criticalityLevel:
+          this.vulnerability.criticalityLevel.value ||
+          this.vulnerability.criticalityLevel,
         solutionProposal: this.vulnerability.solutionProposal,
         evidences: this.vulnerability.evidences,
       };
