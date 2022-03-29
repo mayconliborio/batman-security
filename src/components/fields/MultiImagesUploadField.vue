@@ -44,6 +44,7 @@
 
 <script>
 import BatPreviewBox from "../others/BatPreviewBox";
+import { mapActions } from "vuex";
 export default {
   name: "MultiImagesUploadField",
   components: { BatPreviewBox },
@@ -75,6 +76,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["action_changeMessageSnackBar"]),
     removeImage(index) {
       this.uploadedImages.splice(index, 1);
     },
@@ -95,6 +97,11 @@ export default {
       }
       if (isValid) {
         this.listImages(files);
+      } else {
+        this.action_changeMessageSnackBar({
+          message: "Arquivos inválidos!",
+          sucess: false,
+        });
       }
     },
     listImages(images) {
