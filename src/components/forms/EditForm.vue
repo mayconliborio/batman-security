@@ -197,8 +197,6 @@ export default {
         messages.push("Tipo de Vulnerabilidade");
         validate.isValid = false;
       }
-      console.log(this.vulnerability.type.value, this.vulnerability.type);
-      console.log(this.vulnerability.evidences.length);
       if (
         this.vulnerability.type.value === 2 &&
         !this.vulnerability.evidences.length
