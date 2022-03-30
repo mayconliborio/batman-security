@@ -181,8 +181,6 @@ export default {
       return Math.floor(this.getFilteredVulnerabilities.length / 6);
     },
     filteredLocal() {
-      let get = this.getFilteredVulnerabilities;
-      console.log(get);
       let page = this.pagination.page,
         perPage = this.pagination.perPage;
       let inicio = perPage * page - perPage,

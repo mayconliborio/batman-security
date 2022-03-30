@@ -188,11 +188,6 @@ export default {
         messages.push("Descrição");
         validate.isValid = false;
       }
-      console.log(
-        this.vulnerability.criticalityLevel.value || this.criticalityLevel
-      );
-
-      console.log(this.vulnerability.type.value || this.vulnerability.type);
 
       if (this.vulnerability.criticalityLevel.value === 0) {
         messages.push("Grau de Criticidade");

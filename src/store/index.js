@@ -179,10 +179,8 @@ export default new Vuex.Store({
       let actualSetTimeout = context.getters.getActualSetTimeout;
       context.commit("setMessageSnackBar", payload);
 
-      console.log(actualSetTimeout);
       if (actualSetTimeout) {
         clearTimeout(actualSetTimeout);
-        console.log("entrou: ", actualSetTimeout);
       }
 
       context.commit(
