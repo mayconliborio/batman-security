@@ -5,6 +5,7 @@
     </div>
     <div class="container-input">
       <v-text-field
+        :data-cy="label + '-field'"
         :append-icon="appendIcon"
         :disabled="disabled"
         :rules="rules ? rules : []"

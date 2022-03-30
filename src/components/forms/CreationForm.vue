@@ -5,8 +5,8 @@
         <TextField
           :cols="6"
           placeholder="Vulnerabilidade 1..."
-          @update="title = $event"
           label="Título"
+          @update="title = $event"
         />
         <TextField
           :cols="6"
@@ -61,11 +61,11 @@
           @click="createVulnerability(updatedValues)"
         />
         <MessageModal
-          v-if="messageModalControler.show"
-          :title="messageModalControler.title"
-          :header="messageModalControler.header"
-          :messages="messageModalControler.messages"
-          @confirm="action_resetMessageModalControler()"
+          v-if="messageModalController.show"
+          :title="messageModalController.title"
+          :header="messageModalController.header"
+          :messages="messageModalController.messages"
+          @confirm="action_resetMessageModalController()"
         />
       </v-row>
     </v-container>
@@ -100,7 +100,7 @@ export default {
       comment: "",
       type: "",
       criticalityLevel: {},
-      evidences: {},
+      evidences: [],
       solutionProposal: "",
     };
   },
@@ -108,8 +108,8 @@ export default {
     ...mapActions([
       "action_changeMessageSnackBar",
       "action_createVulnerability",
-      "action_setMessageModalControler",
-      "action_resetMessageModalControler",
+      "action_setMessageModalController",
+      "action_resetMessageModalController",
     ]),
     createVulnerability() {
       let validate = this.checkValidity();
@@ -122,13 +122,13 @@ export default {
         });
         this.goToHomePage();
       } else {
-        this.action_setMessageModalControler(validate.messageModalControler);
+        this.action_setMessageModalController(validate.messageModalController);
       }
     },
     checkValidity() {
       let validate = {
         isValid: true,
-        messageModalControler: {
+        messageModalController: {
           header: "Cadastro de Vulnerabilidade",
           title: "Atenção, os seguintes campos são obrigatórios:",
           messages: [],
@@ -160,7 +160,7 @@ export default {
         messages.push("Solução Proposta");
         validate.isValid = false;
       }
-      validate.messageModalControler.messages = messages;
+      validate.messageModalController.messages = messages;
       return validate;
     },
   },
@@ -168,7 +168,7 @@ export default {
     ...mapState({
       screenSize: (state) => state.screenSize,
       id: (state) => state.vulnerabilitiesIndex,
-      messageModalControler: (state) => state.messageModalControler,
+      messageModalController: (state) => state.messageModalController,
     }),
     updatedValues() {
       return {
@@ -177,7 +177,7 @@ export default {
         comment: this.comment,
         type: this.type.value,
         criticalityLevel: this.criticalityLevel.value,
-        evidences: this.evidences,
+        evidences: this.evidences || [],
         solutionProposal: this.solutionProposal,
       };
     },

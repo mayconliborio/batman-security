@@ -9,6 +9,7 @@
     </div>
     <div class="container-input">
       <v-select
+        :data-cy="label + '-field'"
         :disabled="disabled"
         :item-text="keyName ? keyName : 'name'"
         :item-value="keyValue ? keyValue : 'value'"
@@ -209,6 +210,7 @@ label {
 ::v-deep .v-select__selection--comma {
   overflow: visible;
 }
+
 ::v-deep .v-menu__content {
   width: 100%;
   min-width: 100%;

@@ -1,11 +1,17 @@
 <template>
-  <div class="flex-justify-center">
+  <div class="flex-justify-start">
     <div class="expanded-box flex-justify-center" v-if="selectedImage.show">
       <div class="box">
-        <div class="is-clickable close-button text-primary flex-justify-end">
-          <i @click="closeExpandedImage(index)" class="far fa-times-circle" />
+        <div class="close-button text-primary flex-justify-end">
+          <i
+            data-cy="Diminuir-image"
+            @click="closeExpandedImage(index)"
+            class="fas fa-times is-clickable"
+          />
         </div>
-        <img class="expanded-image" alt="" :src="selectedImage.src" />
+        <div class="background-image flex-justify-center">
+          <img class="expanded-image" alt="" :src="selectedImage.src" />
+        </div>
       </div>
     </div>
     <div
@@ -13,19 +19,25 @@
       v-for="(image, index) in images"
       :key="index"
     >
-      <div v-if="editable" class="is-clickable remove-button flex-justify-end">
+      <div class="remove-image flex-justify-end">
         <i
+          :data-cy="'Remover-' + index + '-image'"
+          title="Remover imagem"
           @click="removeImage(index)"
           v-if="editable"
-          class="far fa-times-circle"
+          class="fas fa-times"
         />
       </div>
-      <img
-        class="selected-image is-clickable"
-        @click="showImage(index)"
-        alt=""
-        :src="image"
-      />
+      <div class="flex-justify-center">
+        <img
+          :data-cy="'Expandir-' + index + '-image'"
+          class="selected-image is-clickable"
+          @click="showImage(index)"
+          title="Expandir imagem"
+          alt=""
+          :src="image"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -41,6 +53,7 @@ export default {
       default: false,
     },
   },
+  mounted() {},
   data() {
     return {
       selectedImage: {
@@ -49,15 +62,11 @@ export default {
       },
     };
   },
-  mounted() {
-    console.log(this.editable);
-  },
   methods: {
     removeImage(index) {
       this.$emit("removeImage", index);
     },
     showImage(index) {
-      console.log(this.images);
       this.selectedImage = {
         show: true,
         src: this.images[index.toString()],
@@ -81,35 +90,42 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: $backGroundOpacity;
+  background-color: $whitegroundOpacity;
+}
+.close-button {
+  margin-bottom: 10px;
+  margin-right: -34px;
+  font-size: 50px;
 }
 
-.selected-image {
-  height: 120px;
-  object-fit: cover;
+.background-image {
+  padding-bottom: 60px;
 }
 
 .expanded-image {
   max-width: 1100px;
-  max-height: 600px;
-}
-
-.close-button {
-  margin-bottom: 10px;
-  margin-right: -30px;
-  font-size: 50px;
-}
-
-.remove-button {
-  margin-bottom: 3px;
-}
-
-.box {
-  position: fixed;
-  top: 100px;
+  max-height: 650px;
+  width: 95%;
+  height: 95%;
 }
 
 .images-box {
-  padding: 10px;
+  width: 175px;
+  margin: 10px 5px;
+  background-color: $blackgroundOpacity;
+  padding-bottom: 25px;
+}
+
+.selected-image {
+  width: 125px;
+  object-fit: cover;
+}
+
+.remove-image {
+  font-size: 18px;
+  padding-right: 5px;
+  padding-top: 2px;
+  width: 100%;
+  height: 25px;
 }
 </style>

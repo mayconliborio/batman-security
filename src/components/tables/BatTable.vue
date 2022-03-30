@@ -13,29 +13,48 @@
       </div>
     </div>
     <ConfirmationModal
-      v-if="modalControler.show"
-      :header="modalControler.header"
-      :messages="modalControler.messages"
-      @cancel="action_resetModalControler()"
+      v-if="modalController.show"
+      :header="modalController.header"
+      :messages="modalController.messages"
+      @cancel="action_resetModalController()"
       @confirm="deleteVulnerability(activeVulnerability.id)"
     />
     <div class="table-rows w-100 flex-column-center">
       <div
-        v-for="vulnerability in getFilteredVulnerabilities"
+        v-for="(vulnerability, index) in filteredLocal"
         class="w-100"
         :key="vulnerability.id + Math.random().toString(16).slice(2)"
       >
         <VulnerabilityRow
+          :index="index"
           :vulnerability="modifiedItem(vulnerability)"
           @showClick="showVulnerability($event)"
           @editClick="editVulnerability($event)"
-          @deleteClick="deleteVulnerabilityModalControler($event)"
+          @deleteClick="deleteVulnerabilityModalController($event)"
         />
       </div>
-      <span
-        class="text-primary table-content"
-        v-if="!getFilteredVulnerabilities.length"
-      >
+      <div class="pagination-box flex-justify-center" v-if="pagination.active">
+        <div class="flex-justify-between w-100">
+          <span
+            @click="previousPage"
+            data-cy="PreviousPage-button"
+            class="pagination-circle is-clickable flex-justify-center"
+            :class="{ disabled: pagination.page === 1 }"
+            ><i class="fas fa-angle-left"></i
+          ></span>
+          <span class="pagination-circle flex-justify-center">
+            {{ pagination.page }}
+          </span>
+          <span
+            data-cy="NextPage-button"
+            class="pagination-circle is-clickable flex-justify-center"
+            :class="{ disabled: pagination.page === pagination.pages }"
+            @click="nextPage"
+            ><i class="fas fa-angle-right"></i
+          ></span>
+        </div>
+      </div>
+      <span class="text-primary table-content" v-if="!filteredLocal.length">
         Nenhuma vulnerabilidade encontrada!
       </span>
     </div>
@@ -61,6 +80,14 @@ export default {
         { title: "TIPO", width: 20 },
         { title: "EVIDÊNCIA", width: 25 },
       ],
+      pagination: {
+        active: false,
+        page: 1,
+        perPage: 6,
+        pages: 0,
+        total: 0,
+      },
+      localList: {},
     };
   },
   components: { ConfirmationModal, VulnerabilityRow },
@@ -69,8 +96,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      "action_setModalControler",
-      "action_resetModalControler",
+      "action_setModalController",
+      "action_resetModalController",
       "action_changeMessageSnackBar",
       "action_deleteVulnerability",
     ]),
@@ -108,11 +135,11 @@ export default {
         message: "Vulnerabilidade excluida com sucesso!",
         sucess: true,
       });
-      this.action_resetModalControler();
+      this.action_resetModalController();
     },
-    deleteVulnerabilityModalControler(item) {
+    deleteVulnerabilityModalController(item) {
       this.otherButton = true;
-      let newModalControler = {
+      let newModalController = {
         header: "Excluir Vulnerabilidade",
         messages: [
           `Você está prestes a excluir a vulnerabilidade ${item.title}.`,
@@ -120,16 +147,60 @@ export default {
         ],
         show: true,
       };
-      this.action_setModalControler(newModalControler);
+      this.action_setModalController(newModalController);
       this.activeVulnerability = item;
+    },
+    previousPage() {
+      if (this.pagination.page > 1) {
+        this.pagination.page--;
+      }
+    },
+    nextPage() {
+      if (this.pagination.page < this.pagination.pages) {
+        this.pagination.page++;
+      }
+    },
+    resetPagination() {
+      this.pagination = {
+        active: false,
+        page: 0,
+      };
     },
   },
   computed: {
     ...mapState({
-      modalControler: (state) => state.modalControler,
+      modalController: (state) => state.modalController,
       vulnerabilities: (state) => state.vulnerabilities,
     }),
     ...mapGetters(["getFilteredVulnerabilities"]),
+    pagesNumber() {
+      return Math.floor(this.getFilteredVulnerabilities.length / 6);
+    },
+    filteredLocal() {
+      let page = this.pagination.page,
+        perPage = this.pagination.perPage;
+      let inicio = perPage * page - perPage,
+        fim = perPage * page;
+      if (fim > this.pagination.total) {
+        fim = this.getFilteredVulnerabilities.length;
+      }
+      return this.pagination.active
+        ? this.getFilteredVulnerabilities.slice(inicio, fim)
+        : this.getFilteredVulnerabilities;
+    },
+  },
+  watch: {
+    getFilteredVulnerabilities(newValue) {
+      let length = newValue.length;
+
+      let div = Math.floor(length / this.pagination.perPage);
+      let mod = length % this.pagination.perPage;
+      this.pagination.total = length - 1;
+      this.pagination.active = length > this.pagination.perPage;
+      this.pagination.pages = div + (mod === 0 ? 0 : 1);
+      this.pagination.page =
+        length > this.pagination.perPage ? this.pagination.page : 1;
+    },
   },
 };
 </script>
@@ -156,5 +227,28 @@ h2 {
 .table-rows,
 .table-header {
   padding-left: 6px;
+}
+
+.pagination-circle {
+  width: 30px;
+  height: 25px;
+  border-radius: 6px;
+  background-color: $primaryColor;
+  color: $blackColor;
+  font-family: Roboto Black, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pagination-box {
+  width: 120px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  user-select: none;
+}
+
+.disabled {
+  pointer-events: none;
+  background-color: $whitegroundOpacity;
 }
 </style>

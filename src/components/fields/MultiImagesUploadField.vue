@@ -8,6 +8,7 @@
       :style="'height: ' + height + 'px'"
     >
       <input
+        :data-cy="label + '-field'"
         type="file"
         multiple
         :name="uploadFieldName"
@@ -20,17 +21,19 @@
       <p v-if="true">
         <i class="fas fa-paperclip text-primary"></i><br />
         <span v-if="!uploadedImages.length">
-          Arraste e solte aqui os arquivos
+          Arraste e solte aqui o(s) arquivo(s)
           <span class="text-primary">.png</span> ou
           <span class="text-primary">.jpg</span><br />ou clique aqui para
-          selecionar os arquivos do seu computador
+          selecionar do seu computador!
           <br />
         </span>
         <span v-else>
           <span class="count"
-            >{{ uploadedImages.length }} Arquivos selecionados... <br
+            >{{ uploadedImages.length }} Arquivo(s) selecionado(s)... <br
           /></span>
-          <span> Clique aqui para alterar os arquivos selecionados! </span>
+          <span>
+            Clique aqui para alterar o(s) arquivo(s) selecionado(s)!
+          </span>
         </span>
       </p>
     </div>
@@ -45,6 +48,7 @@
 <script>
 import BatPreviewBox from "../others/BatPreviewBox";
 import { mapActions } from "vuex";
+
 export default {
   name: "MultiImagesUploadField",
   components: { BatPreviewBox },
@@ -69,7 +73,7 @@ export default {
           let image = this.images[i].toString();
           images.push(image);
         }
-        this.uploadedImages = images;
+        this.uploadedImages = images || [];
         this.$emit("update", images);
         this.preLoad = false;
       }
@@ -97,9 +101,14 @@ export default {
       }
       if (isValid) {
         this.listImages(files);
+      } else if (files.length > 0) {
+        this.action_changeMessageSnackBar({
+          message: "Arquivo(s) inválidos!",
+          sucess: false,
+        });
       } else {
         this.action_changeMessageSnackBar({
-          message: "Arquivos inválidos!",
+          message: "Nenhum arquivo selecionado!",
           sucess: false,
         });
       }
@@ -140,7 +149,7 @@ img {
 }
 
 .drop-box {
-  outline: 1px dashed $textColor; /* the dash box */
+  outline: 1px dashed $textColor;
   background: $secondaryColor;
   color: $textColor;
   margin: 0 1px;
@@ -149,14 +158,14 @@ img {
 }
 
 .input-file {
-  opacity: 0; /* invisible but it's there! */
+  opacity: 0;
   width: 100%;
   cursor: pointer;
   position: absolute;
 }
 
 .drop-box:hover {
-  background: $blackColor; /* when mouse over to the drop zone, change color */
+  background: $blackColor;
 }
 
 .drop-box p {
