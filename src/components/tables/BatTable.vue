@@ -21,7 +21,7 @@
     />
     <div class="table-rows w-100 flex-column-center">
       <div
-        v-for="(vulnerability, index) in getFilteredVulnerabilities"
+        v-for="(vulnerability, index) in filteredLocal"
         class="w-100"
         :key="vulnerability.id + Math.random().toString(16).slice(2)"
       >
@@ -33,10 +33,30 @@
           @deleteClick="deleteVulnerabilityModalController($event)"
         />
       </div>
-      <span
-        class="text-primary table-content"
-        v-if="!getFilteredVulnerabilities.length"
-      >
+      <div class="pagination-box flex-justify-center" v-if="pagination.active">
+        <div class="flex-justify-between w-100">
+          <span
+            @click="previousPage"
+            class="pagination-circle is-clickable flex-justify-center"
+            :class="{ disabled: pagination.page === 1 }"
+            ><i class="fas fa-angle-left"></i
+          ></span>
+          <span
+            @click="nextPage"
+            class="pagination-circle flex-justify-center"
+            :class="{ disabled: pagination.page === pagination.pages }"
+          >
+            {{ pagination.page }}
+          </span>
+          <span
+            @click="nextPage"
+            class="pagination-circle flex-justify-center"
+            :class="{ disabled: pagination.page === pagination.pages }"
+            ><i class="fas fa-angle-right"></i
+          ></span>
+        </div>
+      </div>
+      <span class="text-primary table-content" v-if="!filteredLocal.length">
         Nenhuma vulnerabilidade encontrada!
       </span>
     </div>
@@ -62,6 +82,13 @@ export default {
         { title: "TIPO", width: 20 },
         { title: "EVIDÊNCIA", width: 25 },
       ],
+      pagination: {
+        active: false,
+        page: 1,
+        perPage: 6,
+        pages: 0,
+        total: 0,
+      },
     };
   },
   components: { ConfirmationModal, VulnerabilityRow },
@@ -124,6 +151,31 @@ export default {
       this.action_setModalController(newModalController);
       this.activeVulnerability = item;
     },
+    previousPage() {
+      if (this.pagination.page > 1) {
+        this.pagination.page--;
+      }
+    },
+    nextPage() {
+      if (this.pagination.page < this.pagination.pages) {
+        this.pagination.page++;
+      }
+    },
+    resetPagination() {
+      this.pagination = {
+        active: false,
+        page: 0,
+      };
+    },
+    loadData(length) {
+      let div = Math.floor(length / this.pagination.perPage);
+      let mod = length % this.pagination.perPage;
+      this.pagination.total = length - 1;
+      this.pagination.active = length > this.pagination.perPage;
+      this.pagination.pages = div + (mod === 0 ? 0 : 1);
+      this.pagination.page =
+        length > this.pagination.perPage ? this.pagination.page : 1;
+    },
   },
   computed: {
     ...mapState({
@@ -131,6 +183,28 @@ export default {
       vulnerabilities: (state) => state.vulnerabilities,
     }),
     ...mapGetters(["getFilteredVulnerabilities"]),
+    pagesNumber() {
+      return Math.floor(this.getFilteredVulnerabilities.length / 6);
+    },
+    filteredLocal() {
+      let get = this.getFilteredVulnerabilities;
+      console.log(get);
+      let page = this.pagination.page,
+        perPage = this.pagination.perPage;
+      let inicio = perPage * page - perPage,
+        fim = perPage * page;
+      if (fim > this.pagination.total) {
+        fim = this.getFilteredVulnerabilities.length;
+      }
+      return this.pagination.active
+        ? this.getFilteredVulnerabilities.slice(inicio, fim)
+        : this.getFilteredVulnerabilities;
+    },
+  },
+  watch: {
+    getFilteredVulnerabilities(newValue) {
+      this.loadData(newValue.length);
+    },
   },
 };
 </script>
@@ -157,5 +231,28 @@ h2 {
 .table-rows,
 .table-header {
   padding-left: 6px;
+}
+
+.pagination-circle {
+  width: 30px;
+  height: 25px;
+  border-radius: 6px;
+  background-color: $primaryColor;
+  color: $blackColor;
+  font-family: Roboto Black, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pagination-box {
+  width: 120px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  user-select: none;
+}
+
+.disabled {
+  pointer-events: none;
+  background-color: $whitegroundOpacity;
 }
 </style>

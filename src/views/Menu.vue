@@ -4,7 +4,7 @@
       <div class="logo-box flex-column-center">
         <img alt="logo" src="../assets/images/logo.png" />
       </div>
-      <h3 class="logo-name">Batman Security</h3>
+      <h3 class="is-not-clickable logo-name">Batman Security</h3>
       <ul class="w-100">
         <MenuItem
           :name="'Página Principal'"
