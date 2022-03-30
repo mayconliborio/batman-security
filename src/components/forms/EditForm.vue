@@ -197,7 +197,12 @@ export default {
         messages.push("Tipo de Vulnerabilidade");
         validate.isValid = false;
       }
-      if (this.vulnerability.type.value === 2 && !this.evidences.length) {
+      console.log(this.vulnerability.type.value, this.vulnerability.type);
+      console.log(this.vulnerability.evidences.length);
+      if (
+        this.vulnerability.type.value === 2 &&
+        !this.vulnerability.evidences.length
+      ) {
         messages.push("Evidencias (Quando tipo = SAST)");
         validate.isValid = false;
       }
