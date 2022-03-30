@@ -43,6 +43,7 @@ export default new Vuex.Store({
       evidences: [],
     },
     goBackHome: false,
+    actualSetTimeout: false,
   }),
   getters: {
     getVulnerabilityIndexById: (state) => (id) => {
@@ -82,6 +83,9 @@ export default new Vuex.Store({
         );
       }
       return filteredVulnerabilities;
+    },
+    getActualSetTimeout: (state) => {
+      return state.actualSetTimeout;
     },
   },
   mutations: {
@@ -145,6 +149,12 @@ export default new Vuex.Store({
     setGoBackHome(state, payload) {
       state.goBackHome = payload;
     },
+    setActualSetTimeout(state, payload) {
+      state.actualSetTimeOut = payload;
+    },
+    resetActualSetTimeout(state) {
+      state.actualSetTimeOut = false;
+    },
   },
   actions: {
     action_screenResize(context) {
@@ -166,8 +176,22 @@ export default new Vuex.Store({
       context.commit("setGoBackHome", payload);
     },
     action_changeMessageSnackBar(context, payload) {
+      let actualSetTimeout = context.getters.getActualSetTimeout;
       context.commit("setMessageSnackBar", payload);
-      setTimeout(() => context.commit("resetMessageSnackbar"), 5000);
+
+      console.log(actualSetTimeout);
+      if (actualSetTimeout) {
+        clearTimeout(actualSetTimeout);
+        console.log("entrou: ", actualSetTimeout);
+      }
+
+      context.commit(
+        "setActualSetTimeout",
+        setTimeout(() => {
+          context.commit("resetMessageSnackbar");
+          context.commit("resetActualSetTimeout");
+        }, 5000)
+      );
     },
     action_setFilters(context, payload) {
       context.commit("setFilters", payload);
