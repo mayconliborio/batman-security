@@ -395,6 +395,7 @@ describe("Testes de busca", () => {
 
   it("Usando navegação da tabela", function () {
     clearSearchFields();
+    cy.wait(2000); //tempo para visualizar tela
     cy.get("[data-cy=NextPage-button]").click({ force: true });
     cy.wait(2000); //tempo para visualizar tela
 

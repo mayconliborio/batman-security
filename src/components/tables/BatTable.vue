@@ -42,16 +42,12 @@
             :class="{ disabled: pagination.page === 1 }"
             ><i class="fas fa-angle-left"></i
           ></span>
-          <span
-            @click="nextPage"
-            class="pagination-circle flex-justify-center"
-            :class="{ disabled: pagination.page === pagination.pages }"
-          >
+          <span class="pagination-circle flex-justify-center">
             {{ pagination.page }}
           </span>
           <span
             data-cy="NextPage-button"
-            class="pagination-circle flex-justify-center"
+            class="pagination-circle is-clickable flex-justify-center"
             :class="{ disabled: pagination.page === pagination.pages }"
             @click="nextPage"
             ><i class="fas fa-angle-right"></i
