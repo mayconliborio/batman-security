@@ -109,7 +109,7 @@ function itEditingData() {
 }
 
 describe("Teste CRUD", () => {
-  describe.only("Criando, editando e deletando", () => {
+  describe("Criando, editando e deletando", () => {
     it("Testando validação com campos vazios", () => {
       cy.visit("/pagina-principal");
       menuCreateButton();
@@ -390,8 +390,15 @@ describe("Testes de busca", () => {
 
     cy.get("[data-cy=Diminuir-image]").click({ force: true });
 
-    cy.get("[");
+    backNavigation();
+  });
 
-    cy.pause();
+  it("Usando navegação da tabela", function () {
+    clearSearchFields();
+    cy.get("[data-cy=NextPage-button]").click({ force: true });
+    cy.wait(2000); //tempo para visualizar tela
+
+    cy.get("[data-cy=PreviousPage-button]").click({ force: true });
+    cy.wait(2000); //tempo para visualizar tela
   });
 });

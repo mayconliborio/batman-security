@@ -37,6 +37,7 @@
         <div class="flex-justify-between w-100">
           <span
             @click="previousPage"
+            data-cy="PreviousPage-button"
             class="pagination-circle is-clickable flex-justify-center"
             :class="{ disabled: pagination.page === 1 }"
             ><i class="fas fa-angle-left"></i
@@ -49,9 +50,10 @@
             {{ pagination.page }}
           </span>
           <span
-            @click="nextPage"
+            data-cy="NextPage-button"
             class="pagination-circle flex-justify-center"
             :class="{ disabled: pagination.page === pagination.pages }"
+            @click="nextPage"
             ><i class="fas fa-angle-right"></i
           ></span>
         </div>
@@ -89,6 +91,7 @@ export default {
         pages: 0,
         total: 0,
       },
+      localList: {},
     };
   },
   components: { ConfirmationModal, VulnerabilityRow },
@@ -167,15 +170,6 @@ export default {
         page: 0,
       };
     },
-    loadData(length) {
-      let div = Math.floor(length / this.pagination.perPage);
-      let mod = length % this.pagination.perPage;
-      this.pagination.total = length - 1;
-      this.pagination.active = length > this.pagination.perPage;
-      this.pagination.pages = div + (mod === 0 ? 0 : 1);
-      this.pagination.page =
-        length > this.pagination.perPage ? this.pagination.page : 1;
-    },
   },
   computed: {
     ...mapState({
@@ -203,7 +197,15 @@ export default {
   },
   watch: {
     getFilteredVulnerabilities(newValue) {
-      this.loadData(newValue.length);
+      let length = newValue.length;
+
+      let div = Math.floor(length / this.pagination.perPage);
+      let mod = length % this.pagination.perPage;
+      this.pagination.total = length - 1;
+      this.pagination.active = length > this.pagination.perPage;
+      this.pagination.pages = div + (mod === 0 ? 0 : 1);
+      this.pagination.page =
+        length > this.pagination.perPage ? this.pagination.page : 1;
     },
   },
 };
