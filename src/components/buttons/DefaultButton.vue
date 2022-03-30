@@ -1,5 +1,6 @@
 <template>
   <div
+    :data-cy="text + '-button'"
     :style="'width: ' + (width ? width + 'px;' : 'auto;')"
     class="radius-12 is-clickable flex-justify-center default-button"
     :class="

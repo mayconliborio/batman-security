@@ -1,5 +1,6 @@
 <template>
   <router-link
+    :data-cy="name + '-MenuItem'"
     :key="name"
     tag="li"
     :to="route_name"

@@ -13,23 +13,24 @@
       </div>
     </div>
     <ConfirmationModal
-      v-if="modalControler.show"
-      :header="modalControler.header"
-      :messages="modalControler.messages"
-      @cancel="action_resetModalControler()"
+      v-if="modalController.show"
+      :header="modalController.header"
+      :messages="modalController.messages"
+      @cancel="action_resetModalController()"
       @confirm="deleteVulnerability(activeVulnerability.id)"
     />
     <div class="table-rows w-100 flex-column-center">
       <div
-        v-for="vulnerability in getFilteredVulnerabilities"
+        v-for="(vulnerability, index) in getFilteredVulnerabilities"
         class="w-100"
         :key="vulnerability.id + Math.random().toString(16).slice(2)"
       >
         <VulnerabilityRow
+          :index="index"
           :vulnerability="modifiedItem(vulnerability)"
           @showClick="showVulnerability($event)"
           @editClick="editVulnerability($event)"
-          @deleteClick="deleteVulnerabilityModalControler($event)"
+          @deleteClick="deleteVulnerabilityModalController($event)"
         />
       </div>
       <span
@@ -69,8 +70,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      "action_setModalControler",
-      "action_resetModalControler",
+      "action_setModalController",
+      "action_resetModalController",
       "action_changeMessageSnackBar",
       "action_deleteVulnerability",
     ]),
@@ -108,11 +109,11 @@ export default {
         message: "Vulnerabilidade excluida com sucesso!",
         sucess: true,
       });
-      this.action_resetModalControler();
+      this.action_resetModalController();
     },
-    deleteVulnerabilityModalControler(item) {
+    deleteVulnerabilityModalController(item) {
       this.otherButton = true;
-      let newModalControler = {
+      let newModalController = {
         header: "Excluir Vulnerabilidade",
         messages: [
           `Você está prestes a excluir a vulnerabilidade ${item.title}.`,
@@ -120,13 +121,13 @@ export default {
         ],
         show: true,
       };
-      this.action_setModalControler(newModalControler);
+      this.action_setModalController(newModalController);
       this.activeVulnerability = item;
     },
   },
   computed: {
     ...mapState({
-      modalControler: (state) => state.modalControler,
+      modalController: (state) => state.modalController,
       vulnerabilities: (state) => state.vulnerabilities,
     }),
     ...mapGetters(["getFilteredVulnerabilities"]),

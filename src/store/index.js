@@ -9,12 +9,12 @@ export default new Vuex.Store({
       width: {},
       heigth: {},
     },
-    modalControler: {
+    modalController: {
       show: false,
       header: "",
       messages: [],
     },
-    messageModalControler: {
+    messageModalController: {
       show: false,
       header: "",
       title: "",
@@ -89,31 +89,31 @@ export default new Vuex.Store({
       state.screenSize.width = document.documentElement.clientWidth;
       state.screenSize.heigth = document.documentElement.clientHeight;
     },
-    resetModalControler(state) {
-      state.modalControler = {
+    resetModalController(state) {
+      state.modalController = {
         show: false,
         header: "",
         messages: [""],
       };
     },
-    setModalControler(state, payload) {
-      state.modalControler.header = payload.header;
-      state.modalControler.messages = payload.messages;
-      state.modalControler.show = true;
+    setModalController(state, payload) {
+      state.modalController.header = payload.header;
+      state.modalController.messages = payload.messages;
+      state.modalController.show = true;
     },
-    resetMessageModalControler(state) {
-      state.messageModalControler = {
+    resetMessageModalController(state) {
+      state.messageModalController = {
         show: false,
         title: "",
         header: "",
         messages: [""],
       };
     },
-    setMessageModalControler(state, payload) {
-      state.messageModalControler.header = payload.header;
-      state.messageModalControler.title = payload.title;
-      state.messageModalControler.messages = payload.messages;
-      state.messageModalControler.show = true;
+    setMessageModalController(state, payload) {
+      state.messageModalController.header = payload.header;
+      state.messageModalController.title = payload.title;
+      state.messageModalController.messages = payload.messages;
+      state.messageModalController.show = true;
     },
     setMessageSnackBar(state, payload) {
       state.snackBar.show = true;
@@ -150,17 +150,17 @@ export default new Vuex.Store({
     action_screenResize(context) {
       context.commit("screenResize");
     },
-    action_resetModalControler(context) {
-      context.commit("resetModalControler");
+    action_resetModalController(context) {
+      context.commit("resetModalController");
     },
-    action_setModalControler(context, payload) {
-      context.commit("setModalControler", payload);
+    action_setModalController(context, payload) {
+      context.commit("setModalController", payload);
     },
-    action_resetMessageModalControler(context) {
-      context.commit("resetMessageModalControler");
+    action_resetMessageModalController(context) {
+      context.commit("resetMessageModalController");
     },
-    action_setMessageModalControler(context, payload) {
-      context.commit("setMessageModalControler", payload);
+    action_setMessageModalController(context, payload) {
+      context.commit("setMessageModalController", payload);
     },
     action_setGoBackHome(context, payload) {
       context.commit("setGoBackHome", payload);

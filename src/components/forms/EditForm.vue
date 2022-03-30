@@ -42,7 +42,7 @@
         <MultiImagesUploadField
           :height="screenSize.heigth > 847 ? 250 : 200"
           label="Evidências"
-          :images="vulnerability.evidences"
+          :images="vulnerability.evidences || []"
           @update="vulnerability.evidences = $event"
         />
       </v-row>
@@ -77,11 +77,18 @@
           "
         />
         <ConfirmationModal
-          v-if="modalControler.show"
-          :header="modalControler.header"
-          :messages="modalControler.messages"
-          @cancel="action_resetModalControler()"
+          v-if="modalController.show"
+          :header="modalController.header"
+          :messages="modalController.messages"
+          @cancel="action_resetModalController()"
           @confirm="manageContentModal()"
+        />
+        <MessageModal
+          v-if="messageModalController.show"
+          :title="messageModalController.title"
+          :header="messageModalController.header"
+          :messages="messageModalController.messages"
+          @confirm="action_resetMessageModalController()"
         />
       </v-row>
     </v-container>
@@ -98,10 +105,12 @@ import MultiImagesUploadField from "../fields/MultiImagesUploadField";
 import { mapActions, mapState } from "vuex";
 import ConfirmationModal from "../modal/ConfirmationModal";
 import GlobalMethods from "../../mixins/GlobalMethods";
+import MessageModal from "@/components/modal/MessageModal";
 
 export default {
   name: "EditForm",
   components: {
+    MessageModal,
     ConfirmationModal,
     MultiImagesUploadField,
     TextAreaField,
@@ -129,19 +138,29 @@ export default {
   },
   methods: {
     ...mapActions([
-      "action_setModalControler",
-      "action_resetModalControler",
+      "action_setModalController",
+      "action_resetModalController",
+      "action_setMessageModalController",
+      "action_resetMessageModalController",
       "action_changeMessageSnackBar",
       "action_setActiveVulnerability",
       "action_updateVulnerability",
     ]),
     saveEditedVulnerability() {
       if (this.isDifferent()) {
-        let newModalControler = {
-          header: "Edição de Vulnerabilidade",
-          messages: ["Tem certeza que deseja alterar o registro? "],
-        };
-        this.action_setModalControler(newModalControler);
+        let validate = this.checkValidity();
+
+        if (validate.isValid) {
+          let newModalController = {
+            header: "Edição de Vulnerabilidade",
+            messages: ["Tem certeza que deseja alterar o registro? "],
+          };
+          this.action_setModalController(newModalController);
+        } else {
+          this.action_setMessageModalController(
+            validate.messageModalController
+          );
+        }
       } else {
         this.action_changeMessageSnackBar({
           message: "Nenhum dado foi alterado!",
@@ -150,24 +169,62 @@ export default {
         this.goToHomePage();
       }
     },
+    checkValidity() {
+      let validate = {
+        isValid: true,
+        messageModalController: {
+          header: "Cadastro de Vulnerabilidade",
+          title: "Atenção, os seguintes campos são obrigatórios:",
+          messages: [],
+        },
+      };
+      let messages = [];
+
+      if (!this.vulnerability.title) {
+        messages.push("Título");
+        validate.isValid = false;
+      }
+      if (!this.vulnerability.comment) {
+        messages.push("Descrição");
+        validate.isValid = false;
+      }
+      if (this.vulnerability.criticalityLevel.value === 0) {
+        messages.push("Grau de Criticidade");
+        validate.isValid = false;
+      }
+      if (this.vulnerability.type.value === 0) {
+        messages.push("Tipo de Vulnerabilidade");
+        validate.isValid = false;
+      }
+      if (this.vulnerability.type.value === 2 && !this.evidences.length) {
+        messages.push("Evidencias (Quando tipo = SAST)");
+        validate.isValid = false;
+      }
+      if (!this.vulnerability.solutionProposal) {
+        messages.push("Solução Proposta");
+        validate.isValid = false;
+      }
+      validate.messageModalController.messages = messages;
+      return validate;
+    },
     backToHomePage() {
       if (this.isDifferent()) {
-        let newModalControler = {
+        let newModalController = {
           header: "Edição de Vulnerabilidade",
           messages: [
             "Você está saindo da edição sem salvar os dados.",
             "Deseja continuar?",
           ],
         };
-        this.action_setModalControler(newModalControler);
+        this.action_setModalController(newModalController);
       } else {
-        this.action_resetModalControler();
+        this.action_resetModalController();
         this.goToHomePage();
       }
     },
     manageContentModal() {
       if (this.backAction) {
-        this.action_resetModalControler();
+        this.action_resetModalController();
         this.goToHomePage();
       } else {
         this.action_updateVulnerability(this.updatedVulnerability);
@@ -175,7 +232,7 @@ export default {
           message: "Vulnerabilidade alterada com sucesso!",
           sucess: true,
         });
-        this.action_resetModalControler();
+        this.action_resetModalController();
         this.goToHomePage();
       }
     },
@@ -207,8 +264,9 @@ export default {
   computed: {
     ...mapState({
       screenSize: (state) => state.screenSize,
-      modalControler: (state) => state.modalControler,
+      modalController: (state) => state.modalController,
       activeVulnerability: (state) => state.activeVulnerability,
+      messageModalController: (state) => state.messageModalController,
     }),
     updatedVulnerability() {
       return {
@@ -220,7 +278,7 @@ export default {
           this.vulnerability.criticalityLevel.value ||
           this.vulnerability.criticalityLevel,
         solutionProposal: this.vulnerability.solutionProposal,
-        evidences: this.vulnerability.evidences,
+        evidences: this.vulnerability.evidences || [],
       };
     },
   },

@@ -1,12 +1,16 @@
 <template>
   <div class="preview-label">
-    <div class="label-box">
-      <label>Prévida das Imagens:</label>
+    <div class="label-box" v-if="editable">
+      <label>Prévia das Imagens:</label>
     </div>
-    <div class="preview-box flex-justify-center">
+    <div
+      class="preview-box flex-justify-center"
+      :class="{ editable: editable }"
+    >
       <div id="preview" class="w-100 flex-justify-center">
         <div
-          class="w-100 flex-justify-center"
+          class="w-100"
+          :class="defineClass"
           v-if="images && images.length > 0"
         >
           <BatImages
@@ -35,11 +39,19 @@ export default {
       default: false,
     },
   },
+  computed: {
+    defineClass() {
+      return this.images.length > 4
+        ? "flex-justify-start"
+        : "flex-justify-center";
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .preview-label {
+  color: $primaryColor;
   margin-top: 12px;
 }
 
@@ -55,7 +67,7 @@ export default {
 
 #preview {
   width: 100%;
-  padding: 0 20px;
+  margin: 0 20px;
   flex-wrap: wrap;
 }
 </style>

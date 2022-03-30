@@ -5,6 +5,7 @@
     </div>
     <div class="container-input">
       <v-textarea
+        :data-cy="label + '-field'"
         :rows="rows || 4"
         :no-resize="true"
         :disabled="disabled"
@@ -153,6 +154,7 @@ label {
   font-family: "Roboto Black", sans-serif;
   font-size: 18px;
 }
+
 .v-input ::v-deep textarea {
   color: $primaryColor !important;
   caret-color: $primaryColor !important;
