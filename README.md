@@ -1,5 +1,10 @@
 # batman-security
 
+## Docker setup
+```
+docker compose up
+```
+
 ## Project setup
 ```
 yarn install
